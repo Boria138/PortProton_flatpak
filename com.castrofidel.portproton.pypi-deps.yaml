@@ -1,0 +1,10 @@
+# Generated with flatpak-pip-generator --runtime org.gnome.Sdk --yaml -o com.castrofidel.portproton.pypi-deps wmctrl
+name: python3-wmctrl
+buildsystem: simple
+build-commands:
+  - pip3 install --verbose --exists-action=i --no-index --find-links="file://${PWD}"
+    --prefix=${FLATPAK_DEST} "wmctrl" --no-build-isolation
+sources:
+  - type: file
+    url: https://files.pythonhosted.org/packages/a5/48/bd9b5c4c0d865e5d143f91020600f921c37f9755c8101336d292e1de1252/wmctrl-0.4.tar.gz
+    sha256: 66cbff72b0ca06a22ec3883ac3a4d7c41078bdae4fb7310f52951769b10e14e0
