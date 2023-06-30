@@ -213,8 +213,8 @@ modules:
       - -DCMAKE_BUILD_TYPE=Release
     sources:
       - type: archive
-        url: https://github.com/KhronosGroup/Vulkan-Tools/archive/refs/tags/v1.2.162.tar.gz
-        sha256: 98a3a00471da65df833b4ffeb1ab29ec1d169d5feab54270cf4cd8f50f82e682
+        url: https://github.com/KhronosGroup/Vulkan-Tools/archive/refs/tags/v1.3.255.tar.gz
+        sha256: ccd9175eec671b9ebff2486d1fb3e3d2f318028bbc873378ff9e1382b432abc6
 
   - name: icoutils
     build-options:
