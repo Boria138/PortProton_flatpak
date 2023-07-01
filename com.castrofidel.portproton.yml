@@ -65,18 +65,6 @@ inherit-extensions:
   - org.winehq.Wine.DLLs
 
 add-extensions:
-  org.gnome.Platform.Compat.i386:
-    directory: lib/i386-linux-gnu
-    version: '44'
-
-  x-compat-i386-opts: &compat_i386_opts
-    prepend-pkg-config-path: /app/lib32/pkgconfig:/usr/lib/i386-linux-gnu/pkgconfig
-    ldflags: -L/app/lib32
-    append-path: /usr/lib/sdk/toolchain-i386/bin
-    env:
-      CC: i686-unknown-linux-gnu-gcc
-      CXX: i686-unknown-linux-gnu-g++
-    libdir: /app/lib32
 
   org.freedesktop.Platform.GL32:
     directory: lib/i386-linux-gnu/GL
@@ -90,25 +78,6 @@ add-extensions:
     download-if: active-gl-driver
     enable-if: active-gl-driver
 
-  x-compat-i386-opts: &compat_i386_opts
-    prepend-pkg-config-path: /app/lib32/pkgconfig:/usr/lib/i386-linux-gnu/pkgconfig
-    ldflags: -L/app/lib32
-    append-path: /usr/lib/sdk/toolchain-i386/bin
-    env:
-      CC: i686-unknown-linux-gnu-gcc
-      CXX: i686-unknown-linux-gnu-g++
-    libdir: /app/lib32
-
-  org.freedesktop.Platform.VAAPI.Intel.i386:
-    directory: lib/i386-linux-gnu/dri/intel-vaapi-driver
-    version: '44'
-    versions: '44'
-    autodelete: false
-    no-autodownload: true
-    add-ld-path: lib
-    download-if: have-intel-gpu
-    autoprune-unless: have-intel-gpu
-
   com.valvesoftware.Steam.Utility:
     subdirectories: true
     directory: utils
@@ -118,6 +87,15 @@ add-extensions:
     merge-dirs: bin
     no-autodownload: true
     autodelete: true
+
+x-compat-i386-opts: &compat_i386_opts
+  prepend-pkg-config-path: /app/lib32/pkgconfig:/usr/lib/i386-linux-gnu/pkgconfig
+  ldflags: -L/app/lib32
+  append-path: /usr/lib/sdk/toolchain-i386/bin
+  env:
+    CC: i686-unknown-linux-gnu-gcc
+    CXX: i686-unknown-linux-gnu-g++
+  libdir: /app/lib32
     
 modules:
 
@@ -128,8 +106,8 @@ modules:
     buildsystem: autotools
     sources:
       - type: archive
-        url: https://www.x.org/releases/individual/lib/libXmu-1.1.2.tar.bz2
-        sha256: 756edc7c383254eef8b4e1b733c3bf1dc061b523c9f9833ac7058378b8349d0b
+        url: https://www.x.org/releases/individual/lib/libXmu-1.1.4.tar.gz
+        sha256: 3091d711cdc1d8ea0f545a13b90d1464c3c3ab64778fd121f0d789b277a80289
 
   - name: wmctrl
     buildsystem: autotools
@@ -143,32 +121,30 @@ modules:
 
   - name: gamemode
     buildsystem: meson
-    config-opts: &gamemode_opts
+    config-opts: &gamemode_config_opts
       - -Dwith-examples=false
       - -Dwith-util=false
       - -Dwith-sd-bus-provider=no-daemon
+    post-install:
+      - install -Dm0775 -t /app/bin ../data/gamemoderun
     sources: &gamemode_sources
-      - type: git
-        url: https://github.com/FeralInteractive/gamemode.git
-        tag: '1.7'
-        commit: 4dc99dff76218718763a6b07fc1900fa6d1dafd9
+      - type: archive
+        url: https://github.com/FeralInteractive/gamemode/releases/download/1.7/gamemode-1.7.tar.xz
+        sha256: c1860f76f1d4c0d6e3965e52de21c824f24791049946da728da50f0c63748389
         x-checker-data:
-          type: git
+          type: anitya
+          project-id: 17410
+          stable-only: true
+          url-template: https://github.com/FeralInteractive/gamemode/releases/download/$version/gamemode-$version.tar.xz
 
   - name: gamemode-32bit
     build-options:
       arch:
         x86_64: *compat_i386_opts
     buildsystem: meson
-    config-opts: *gamemode_opts
+    config-opts: *gamemode_config_opts
     sources: *gamemode_sources
-
-  - name: gamemoderun
-    buildsystem: simple
-    build-commands:
-      - install -Dm755 data/gamemoderun -t /app/bin
-    sources: *gamemode_sources
-        
+                
   - name: platform-bootstrap
     buildsystem: simple
     build-commands:
@@ -179,7 +155,6 @@ modules:
         mkdir -p /app/lib/i386-linux-gnu
         mkdir -p /app/lib/debug/lib/i386-linux-gnu
         mkdir -p /app/lib/i386-linux-gnu/GL
-        mkdir -p /app/lib/i386-linux-gnu/dri/intel-vaapi-driver
         install -D portproton /app/bin/portproton
         install -Dm644 com.castrofidel.portproton.png /app/share/icons/hicolor/128x128/apps/com.castrofidel.portproton.png
         install -Dm644 com.castrofidel.portproton.desktop /app/share/applications/${FLATPAK_ID}.desktop
@@ -194,17 +169,17 @@ modules:
       - type: file
         path: com.castrofidel.portproton.png
       - type: file
+        path: portproton
+      - type: file
         path: com.castrofidel.portproton.desktop
 
   - name: desktop-file-utils
-    build-options:
-      no-debuginfo: true  
-    buildsystem: autotools
+    buildsystem: meson
     sources:
       - type: archive
         url: https://www.freedesktop.org/software/desktop-file-utils/releases/desktop-file-utils-0.26.tar.xz
         sha256: b26dbde79ea72c8c84fb7f9d870ffd857381d049a86d25e0038c4cef4c747309
-
+        
   - name: vulkan-tools
     buildsystem: cmake-ninja
     config-opts:
@@ -212,13 +187,12 @@ modules:
       - -DVULKAN_HEADERS_INSTALL_DIR=/app
       - -DCMAKE_BUILD_TYPE=Release
     sources:
-      - type: archive
-        url: https://github.com/KhronosGroup/Vulkan-Tools/archive/refs/tags/v1.3.255.tar.gz
-        sha256: ccd9175eec671b9ebff2486d1fb3e3d2f318028bbc873378ff9e1382b432abc6
+      - type: git
+        url: https://github.com/KhronosGroup/Vulkan-Tools.git
+        tag: sdk-1.3.224.1
+        commit: 497f232680b046db34ba9e9da065e6303a125851
 
   - name: icoutils
-    build-options:
-    no-debuginfo: true  
     buildsystem: autotools
     sources:
       - type: archive
@@ -229,17 +203,11 @@ modules:
         sha256: 17abe02d043a253b68b47e3af69c9fc755b895db68fdc8811786125df564c6e0
 
   - name: cabextract
-    build-options:
-      strip: true
     sources:
       - type: archive
         url: https://www.cabextract.org.uk/cabextract-1.11.tar.gz
         sha256: b5546db1155e4c718ff3d4b278573604f30dd64c3c5bfd4657cd089b823a3ac6
-        x-checker-data:
-          type: anitya
-          project-id: 245
-          url-template: https://www.cabextract.org.uk/cabextract-$version.tar.gz
-
+        
   # Libraries
   # ----------------------------------------------------------------------------
 
@@ -251,8 +219,8 @@ modules:
       - --with-pic
     sources:
       - type: archive
-        url: https://github.com/ImageMagick/ImageMagick/archive/7.1.0-37.tar.gz
-        sha256: a54888a1a46dbb808705a3e6c6b5ecb93ee30189a8ae6ea0f02300a0ab0d0996
+        url: https://github.com/ImageMagick/ImageMagick/archive/7.1.1-12.tar.gz
+        sha256: 51567d11fcbca5bd591d191ce9fdf821e2ed1b12c1ad8bc2a2f13da5c6313f33
 
   - name: libportal
     buildsystem: meson
