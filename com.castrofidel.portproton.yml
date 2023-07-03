@@ -33,7 +33,7 @@ finish-args:
   - --allow=devel
   - --talk-name=org.gnome.Mutter.DisplayConfig
   - --system-talk-name=org.freedesktop.UDisks2
-  - --filesystem=host:rw
+  - --filesystem=host
   - --require-version=1.1.2
   # Should fix discord rich presence
   - --filesystem=xdg-run/app/com.discordapp.Discord:create
@@ -156,7 +156,7 @@ modules:
         mkdir -p /app/lib/debug/lib/i386-linux-gnu
         mkdir -p /app/lib/i386-linux-gnu/GL
         install -D portproton /app/bin/portproton
-        install -Dm644 com.castrofidel.portproton.png /app/share/icons/hicolor/128x128/apps/com.castrofidel.portproton.png
+        install -Dm644 com.castrofidel.portproton.png /app/share/pixmaps/com.castrofidel.portproton.png
         install -Dm644 com.castrofidel.portproton.desktop /app/share/applications/${FLATPAK_ID}.desktop
         install -Dm644 -t /app/etc ld.so.conf
         #install -Dm644 $FLATPAK_ID.metainfo.xml /app/share/metainfo/$FLATPAK_ID.appdata.xml

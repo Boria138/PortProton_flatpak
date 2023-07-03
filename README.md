@@ -1,1 +1,3 @@
-# Note that because flatpak does not support xdg-mime the project does not work 
+# Castro-Fidel [PortProton's](https://github.com/Castro-Fidel/PortWINE) flatpak 
+
+## Work in progress

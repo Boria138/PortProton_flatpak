@@ -2,17 +2,18 @@
 Categories=Game
 Comment[en_US]=Software for playing Microsoft Windows games and launchers
 Comment=Software for playing Microsoft Windows games and launchers
-Exec=env /usr/bin/portproton %F
+Exec=/usr/bin/flatpak run --branch=stable --arch=x86_64 --command=portproton --file-forwarding com.castrofidel.portproton %F
 GenericName[en_US]=
 GenericName=
-Icon=portproton
+Icon=com.castrofidel.portproton
 MimeType=application/x-wine-extension-msp;application/x-msi;application/x-ms-dos-executable;
 Name[en_US]=PortProton
 Name=PortProton
-Path=/usr/bin/
 StartupNotify=true
 Type=Application
 X-DBUS-ServiceName=
 X-DBUS-StartupType=
 X-KDE-SubstituteUID=false
 X-KDE-Username=
+X-Flatpak=com.castrofidel.portproton
+
