@@ -5,6 +5,7 @@ base: org.winehq.Wine
 base-version: stable-22.08
 runtime-version: "44"
 command: portproton
+separate-locales: false
 
 sdk-extensions:
   - org.gnome.Sdk.Compat.i386
@@ -34,7 +35,6 @@ finish-args:
   - --talk-name=org.gnome.Mutter.DisplayConfig
   - --system-talk-name=org.freedesktop.UDisks2
   - --filesystem=host
-  - --require-version=1.1.2
   # Should fix discord rich presence
   - --filesystem=xdg-run/app/com.discordapp.Discord:create
   # For mangohud config
@@ -95,16 +95,6 @@ modules:
 
   # Tools
   # ----------------------------------------------------------------------------
-
-  - name: portproton
-    buildsystem: simple
-    sources:
-      - type: git
-        url: https://github.com/Castro-Fidel/PortWINE
-    build-commands:
-      - mkdir -p /app/share/PortProton/data/
-      - cp -rf data_from_portwine/* /app/share/PortProton/data/
-      - ln -s /app/share/PortProton/data/scripts/start.sh /app/bin/portproton
       
   - name: xmu
     buildsystem: autotools
@@ -161,6 +151,7 @@ modules:
         mkdir -p /app/lib/i386-linux-gnu/GL
         install -Dm644 com.castrofidel.portproton.svg /app/share/icons/hicolor/scalable/apps/com.castrofidel.portproton.svg
         install -Dm644 com.castrofidel.portproton.desktop /app/share/applications/${FLATPAK_ID}.desktop
+        install -D portproton -t /app/bin
         install -Dm644 -t /app/etc ld.so.conf
         #install -Dm644 $FLATPAK_ID.metainfo.xml /app/share/metainfo/$FLATPAK_ID.appdata.xml
     sources:
@@ -171,6 +162,8 @@ modules:
           /app/lib/i386-linux-gnu
       - type: file
         path: com.castrofidel.portproton.svg
+      - type: file
+        path: portproton
       - type: file
         path: com.castrofidel.portproton.desktop
 

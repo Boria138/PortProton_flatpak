@@ -11,9 +11,5 @@ Name[en_US]=PortProton
 Name=PortProton
 StartupNotify=true
 Type=Application
-X-DBUS-ServiceName=
-X-DBUS-StartupType=
-X-KDE-SubstituteUID=false
-X-KDE-Username=
 X-Flatpak=com.castrofidel.portproton
 
