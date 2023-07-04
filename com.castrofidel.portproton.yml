@@ -37,9 +37,6 @@ finish-args:
   - --require-version=1.1.2
   # Should fix discord rich presence
   - --filesystem=xdg-run/app/com.discordapp.Discord:create
-  - --filesystem=xdg-documents
-  - --filesystem=xdg-desktop
-  - --filesystem=xdg-download
   # For mangohud config
   - --filesystem=xdg-config/MangoHud:ro
   # Should fix access to SD card on the deck
@@ -54,10 +51,7 @@ finish-args:
   # System tray icon
   - --talk-name=org.kde.StatusNotifierWatcher
   - --talk-name=org.freedesktop.Flatpak
-  - --filesystem=xdg-data/flatpak:ro
-  # Needed for appimages
-  - --env=APPIMAGE_EXTRACT_AND_RUN=1
-
+  
 inherit-extensions:
   - org.freedesktop.Platform.GL32
   - org.freedesktop.Platform.ffmpeg-full
@@ -102,6 +96,16 @@ modules:
   # Tools
   # ----------------------------------------------------------------------------
 
+  - name: portproton
+    buildsystem: simple
+    sources:
+      - type: git
+        url: https://github.com/Castro-Fidel/PortWINE
+    build-commands:
+      - mkdir -p /app/share/PortProton/data/
+      - cp -rf data_from_portwine/* /app/share/PortProton/data/
+      - ln -s /app/share/PortProton/data/scripts/start.sh /app/bin/portproton
+      
   - name: xmu
     buildsystem: autotools
     sources:
@@ -155,8 +159,7 @@ modules:
         mkdir -p /app/lib/i386-linux-gnu
         mkdir -p /app/lib/debug/lib/i386-linux-gnu
         mkdir -p /app/lib/i386-linux-gnu/GL
-        install -D portproton /app/bin/portproton
-        install -Dm644 com.castrofidel.portproton.png /app/share/pixmaps/com.castrofidel.portproton.png
+        install -Dm644 com.castrofidel.portproton.svg /app/share/icons/hicolor/scalable/apps/com.castrofidel.portproton.svg
         install -Dm644 com.castrofidel.portproton.desktop /app/share/applications/${FLATPAK_ID}.desktop
         install -Dm644 -t /app/etc ld.so.conf
         #install -Dm644 $FLATPAK_ID.metainfo.xml /app/share/metainfo/$FLATPAK_ID.appdata.xml
@@ -167,9 +170,7 @@ modules:
           /app/lib32
           /app/lib/i386-linux-gnu
       - type: file
-        path: com.castrofidel.portproton.png
-      - type: file
-        path: portproton
+        path: com.castrofidel.portproton.svg
       - type: file
         path: com.castrofidel.portproton.desktop
 
