@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component type="desktop-application">
+  <id>com.castrofidel.portproton</id>
+
+  <name>PortProton</name>
+  <summary>Software for playing Microsoft Windows games and launchers</summary>
+  <summary xml:lang="en">Software for playing Microsoft Windows games and launchers</summary>
+  <summary xml:lang="ru">Программа для запуска игр и лаунчеров с Microsoft Windows </summary>
+
+  <metadata_license>CC0-1.0</metadata_license>
+  <project_license>MIT</project_license>
+
+  <launchable type="desktop-id">com.castrofidel.portproton.desktop</launchable>
+
+  <url type="bugtracker">https://github.com/Castro-Fidel/PortWINE/issues</url>
+  <url type="donation">https://boosty.to/portwine-linux.ru</url>
+  <url type="homepage">https://linux-gaming.ru</url>
+  <url type="translate">https://github.com/Castro-Fidel/PortWINE/blob/master/data_from_portwine/scripts/lang</url>
+
+  <releases>
+  
+  </releases>
+
+  <content_rating type="oars-1.1">
+  </content_rating>
+
+</component>

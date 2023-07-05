@@ -13,7 +13,7 @@ sdk-extensions:
 
 cleanup:
   - /include
-  - /lib/pkgconfig
+  - /lib*/pkgconfig
   - /man
   - /share/doc
   - /share/gtk-doc
@@ -32,9 +32,17 @@ finish-args:
   - --allow=multiarch
   # For Wine crash handling
   - --allow=devel
-  - --talk-name=org.gnome.Mutter.DisplayConfig
+  # XDG
+  - --filesystem=xdg-desktop
+  - --filesystem=xdg-documents
+  - --filesystem=xdg-download
+  - --filesystem=xdg-music
+  - --filesystem=xdg-pictures
+  - --filesystem=xdg-videos
+  - --filesystem=xdg-data
+  # Need to link .desktop files
+  - --filesystem=~/.local/share/applications:create
   - --system-talk-name=org.freedesktop.UDisks2
-  - --filesystem=host
   # Should fix discord rich presence
   - --filesystem=xdg-run/app/com.discordapp.Discord:create
   # For mangohud config
@@ -45,6 +53,7 @@ finish-args:
   - --filesystem=/run/udev:ro
   # For Debian
   - --filesystem=/media
+  # ENV
   - --env=GST_PLUGIN_SYSTEM_PATH=/app/lib/gstreamer-1.0:/usr/lib/x86_64-linux-gnu/gstreamer-1.0:/app/lib32/gstreamer-1.0:/usr/lib/i386-linux-gnu/gstreamer-1.0
   - --env=LD_LIBRARY_PATH=/app/lib:/app/lib32
   - --env=PATH=/app/bin:/app/utils/bin:/usr/bin:/usr/lib/extensions/vulkan/MangoHud/bin:/usr/lib/extensions/vulkan/OBSVkCapture/bin
@@ -108,6 +117,7 @@ modules:
     sources:
       - type: git
         url: https://github.com/saravanabalagi/wmctrl
+        commit: 7ecfd2adaa2726a0c974b30bd6df2a65094032dd
     build-commands:
       - ./configure --prefix=/app
       - make
@@ -153,7 +163,7 @@ modules:
         install -Dm644 com.castrofidel.portproton.desktop /app/share/applications/${FLATPAK_ID}.desktop
         install -D portproton -t /app/bin
         install -Dm644 -t /app/etc ld.so.conf
-        #install -Dm644 $FLATPAK_ID.metainfo.xml /app/share/metainfo/$FLATPAK_ID.appdata.xml
+        install -Dm644 $FLATPAK_ID.metainfo.xml /app/share/metainfo/$FLATPAK_ID.appdata.xml
     sources:
       - type: inline
         dest-filename: ld.so.conf

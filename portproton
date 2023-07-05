@@ -9,7 +9,6 @@ export port_ver=1.0
 export NO_AT_BRIDGE=1
 ENG_LANG="English"
 RUS_LANG="Russian"
-PW_SET_LANG=$RUS_LANG
 export PW_SILENT_INSTALL="1"
 [ -z "${LANG}" ] && export LANG=C
 my_dir=$(dirname "$(readlink -f "$0")")
