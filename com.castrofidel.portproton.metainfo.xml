@@ -10,12 +10,18 @@
   <metadata_license>CC0-1.0</metadata_license>
   <project_license>MIT</project_license>
 
+  <categories>
+    <category>Game</category>
+  </categories>
+
   <launchable type="desktop-id">com.castrofidel.portproton.desktop</launchable>
 
   <url type="bugtracker">https://github.com/Castro-Fidel/PortWINE/issues</url>
   <url type="donation">https://boosty.to/portwine-linux.ru</url>
   <url type="homepage">https://linux-gaming.ru</url>
   <url type="translate">https://github.com/Castro-Fidel/PortWINE/blob/master/data_from_portwine/scripts/lang</url>
+
+  <developer_name>Castro-Fidel</developer_name>
 
   <releases>
   

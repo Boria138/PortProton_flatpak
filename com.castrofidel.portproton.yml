@@ -42,6 +42,7 @@ finish-args:
   - --filesystem=xdg-data
   # Need to link .desktop files
   - --filesystem=~/.local/share/applications:create
+  # Wine uses UDisks2 to enumerate disk drives
   - --system-talk-name=org.freedesktop.UDisks2
   # Should fix discord rich presence
   - --filesystem=xdg-run/app/com.discordapp.Discord:create
@@ -157,7 +158,6 @@ modules:
         mkdir -p /app/bin
         mkdir -p /app/utils
         mkdir -p /app/lib/i386-linux-gnu
-        mkdir -p /app/lib/debug/lib/i386-linux-gnu
         mkdir -p /app/lib/i386-linux-gnu/GL
         install -Dm644 com.castrofidel.portproton.svg /app/share/icons/hicolor/scalable/apps/com.castrofidel.portproton.svg
         install -Dm644 com.castrofidel.portproton.desktop /app/share/applications/${FLATPAK_ID}.desktop
@@ -170,6 +170,8 @@ modules:
         contents: |
           /app/lib32
           /app/lib/i386-linux-gnu
+      - type: file
+        path: com.castrofidel.portproton.metainfo.xml
       - type: file
         path: com.castrofidel.portproton.svg
       - type: file
