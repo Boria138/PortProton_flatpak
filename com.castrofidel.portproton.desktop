@@ -2,7 +2,7 @@
 Categories=Game
 Comment[en_US]=Software for playing Microsoft Windows games and launchers
 Comment=Software for playing Microsoft Windows games and launchers
-Exec=/usr/bin/flatpak run --branch=stable --arch=x86_64 --command=portproton --file-forwarding com.castrofidel.portproton %F
+Exec=/usr/bin/flatpak run --file-forwarding com.castrofidel.portproton %F
 GenericName[en_US]=
 GenericName=
 Icon=com.castrofidel.portproton
