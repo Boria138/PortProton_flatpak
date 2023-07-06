@@ -2,14 +2,10 @@
 Categories=Game
 Comment[en_US]=Software for playing Microsoft Windows games and launchers
 Comment=Software for playing Microsoft Windows games and launchers
-Exec=/usr/bin/flatpak run --file-forwarding com.castrofidel.portproton %F
-GenericName[en_US]=
-GenericName=
+Exec=portproton %u
 Icon=com.castrofidel.portproton
 MimeType=application/x-wine-extension-msp;application/x-msi;application/x-ms-dos-executable;
 Name[en_US]=PortProton
 Name=PortProton
-StartupNotify=true
 Type=Application
-X-Flatpak=com.castrofidel.portproton
 

@@ -12,9 +12,10 @@ RUS_LANG="Russian"
 export PW_SILENT_INSTALL="1"
 [ -z "${LANG}" ] && export LANG=C
 my_dir=$(dirname "$(readlink -f "$0")")
-if [ "$my_dir" == "/usr/bin" ] ; then
+echo $my_dir
+if [ "$my_dir" == "/app/bin" ] ; then
 	if [ -f "${XDG_DATA_HOME}/scripts/start.sh" ] ; then
-		/usr/bin/env bash "${XDG_DATA_HOME}/scripts/start.sh" "$@"
+		 bash "${XDG_DATA_HOME}/scripts/start.sh" "$@"
 		exit 0
 	else
 		if [ -n "$(locale | grep "LANG=ru_RU.UTF-8")" ] ; then
@@ -36,10 +37,9 @@ links="$(pwd)"
 scripts_dir="${XDG_DATA_HOME}/scripts"
 rm -fr "${XDG_DATA_HOME}/tmp"
 rm -f "${scripts_dir}/"* > /dev/null 2>&1
-fi
 ########################################################################
 mkdir -p "${XDG_DATA_HOME}/tmp"
-echo "${port_ver}" > "${XDG_DATA_HOME}tmp/${portname}_ver"
+echo "${port_ver}" > "${XDG_DATA_HOME}/tmp/${portname}_ver"
 case $PW_SET_LANG in
 	"$RUS_LANG") echo "RUS" > "${XDG_DATA_HOME}/tmp/${portname}_loc" ;;
 	"$ENG_LANG") echo "ENG" > "${XDG_DATA_HOME}/tmp/${portname}_loc" ;;
