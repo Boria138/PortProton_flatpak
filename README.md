@@ -26,11 +26,11 @@ To compile PortProton as a Flatpak, you'll need both [Flatpak](https://flatpak.o
    ```
 2. Compile the flatpak
    ```sh
-   flatpak-builder --repo=portrpoton --force-clean --install-deps-from=flathub build-dir com.castrofidel.portproton.yml
+   flatpak-builder --repo=portpoton --force-clean --install-deps-from=flathub build-dir com.castrofidel.portproton.yml
    ```
    Or (If you use this method, step three can be skipped)
    ```sh
-   flatpak-builder --force-clean --install-deps-from=flathub --user --install build-dir com.castrofidel.portproton.yml
+   flatpak-builder --force-clean --user --install build-dir com.castrofidel.portproton.yml
    ```
 3. Add the local repo and install the flatpak
    ```sh
