@@ -7,6 +7,14 @@ PortProton is a project designed to make it easy and convenient to run Windows g
    ```sh
    flatpak install flathub com.castrofidel.portproton
    ```
+   
+Add an alias that allows you to call PortProton using the `portproton` alias:
+
+```sh
+echo "alias portproton='flatpak run com.castrofidel.portproton'" >> ~/.bashrc
+```
+
+**You will need to source the updated file with`. ~/.bashrc` or restart any terminal emulators you have open for the alias to take effect.**
 
 ## Running
 Launch PortProton from your desktop menu, or via command line:

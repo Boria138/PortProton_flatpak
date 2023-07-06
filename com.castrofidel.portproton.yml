@@ -5,27 +5,12 @@ runtime-version: "44"
 command: portproton
 separate-locales: false
 
-sdk-extensions:
-  - org.gnome.Sdk.Compat.i386
-  - org.freedesktop.Sdk.Extension.toolchain-i386
-
-cleanup:
-  - /include
-  - /lib*/pkgconfig
-  - /man
-  - /share/doc
-  - /share/gtk-doc
-  - /share/man
-  - /share/pkgconfig
-  - "*.la"
-  - "*.a"
-
 finish-args:
   - --share=ipc
   - --socket=x11
   - --socket=wayland
   - --socket=pulseaudio
-  # Should fix "pressure-vessel-wrap[20452]: W: /dev/shm not shared between app instances" error
+  # Fix "pressure-vessel-wrap[20452]: W: /dev/shm not shared between app instances" error
   - --allow=per-app-dev-shm
   - --device=all
   - --share=network
@@ -44,8 +29,6 @@ finish-args:
   - --filesystem=~/.local/share/applications:create
   # Wine uses UDisks2 to enumerate disk drives
   - --system-talk-name=org.freedesktop.UDisks2
-  # Should fix discord rich presence
-  - --filesystem=xdg-run/app/com.discordapp.Discord:create
   # For mangohud config
   - --filesystem=xdg-config/MangoHud:ro
   # Should fix access to SD card on the deck
@@ -64,18 +47,10 @@ finish-args:
 
 add-extensions:
 
-  org.freedesktop.Platform.GL32:
-    directory: lib/i386-linux-gnu/GL
-    version: '1.4'
-    versions: 44;1.4
-    subdirectories: true
-    no-autodownload: true
-    autodelete: false
-    add-ld-path: lib
-    merge-dirs: vulkan/icd.d;glvnd/egl_vendor.d;OpenCL/vendors;lib/dri;lib/d3d;vulkan/explicit_layer.d;vulkan/implicit_layer.d
-    download-if: active-gl-driver
-    enable-if: active-gl-driver
-
+  org.gnome.Platform.Compat.i386:
+    directory: lib/i386-linux-gnu
+    version: "44"
+    
   com.valvesoftware.Steam.Utility:
     subdirectories: true
     directory: utils
@@ -94,6 +69,20 @@ x-compat-i386-opts: &compat_i386_opts
     CC: i686-unknown-linux-gnu-gcc
     CXX: i686-unknown-linux-gnu-g++
   libdir: /app/lib32
+  
+sdk-extensions:
+  - org.gnome.Sdk.Compat.i386
+
+cleanup:
+  - /include
+  - /lib*/pkgconfig
+  - /man
+  - /share/doc
+  - /share/gtk-doc
+  - /share/man
+  - /share/pkgconfig
+  - "*.la"
+  - "*.a"
     
 modules:
 
