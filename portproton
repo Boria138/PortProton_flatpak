@@ -12,7 +12,6 @@ RUS_LANG="Russian"
 export PW_SILENT_INSTALL="1"
 [ -z "${LANG}" ] && export LANG=C
 my_dir=$(dirname "$(readlink -f "$0")")
-echo $my_dir
 if [ "$my_dir" == "/app/bin" ] ; then
 	if [ -f "${XDG_DATA_HOME}/scripts/start.sh" ] ; then
 		 bash "${XDG_DATA_HOME}/scripts/start.sh" "$@"
@@ -75,7 +74,3 @@ if [ "${PW_SILENT_INSTALL}" = "1" ] && [ ! -f "/usr/bin/portproton" ] ; then
 else
 	try_download_scripts | progress_bar
 fi
-ln -s "${XDG_DATA_HOME}" "${HOME}/PortProton"
-echo "Restarting PP after installing..."
-bash -c "${XDG_DATA_HOME}/scripts/start.sh" $@ &
-exit 0

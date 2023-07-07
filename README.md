@@ -38,6 +38,9 @@ To compile PortProton as a Flatpak, you'll need both [Flatpak](https://flatpak.o
    ```
    Or (If you use this method, step three can be skipped)
    ```sh
+   flatpak install org.gnome.Sdk/x86_64/44 org.gnome.Platform/x86_64/44 org.freedesktop.Sdk.Extension.toolchain-i386/x86_64/22.08 org.gnome.Sdk.Compat.i386
+   ```
+   ```sh
    flatpak-builder --force-clean --user --install build-dir com.castrofidel.portproton.yml
    ```
 3. Add the local repo and install the flatpak
