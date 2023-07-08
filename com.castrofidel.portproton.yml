@@ -14,6 +14,7 @@ finish-args:
   - --allow=per-app-dev-shm
   - --device=all
   - --share=network
+  - --system-talk-name=org.freedesktop.NetworkManager
   - --allow=multiarch
   # For Wine crash handling
   - --allow=devel
@@ -38,8 +39,8 @@ finish-args:
   # For Debian
   - --filesystem=/media
   # ENV
+  - --unset-env=mesa_glthread
   - --env=PATH=/app/bin:/usr/bin:/app/utils/bin:/usr/lib/extensions/vulkan/MangoHud/bin/
- # - --env=GST_PLUGIN_SYSTEM_PATH=/app/lib32/gstreamer-1.0:/app/lib/gstreamer-1.0:/usr/lib/i386-linux-gnu/gstreamer-1.0:/usr/lib/x86_64-linux-gnu/gstreamer-1.0
   # System tray icon
   - --talk-name=org.kde.StatusNotifierWatcher
   - --talk-name=org.freedesktop.Flatpak
@@ -249,16 +250,6 @@ modules:
         url: https://github.com/ImageMagick/ImageMagick/archive/7.1.1-12.tar.gz
         sha256: 51567d11fcbca5bd591d191ce9fdf821e2ed1b12c1ad8bc2a2f13da5c6313f33
 
-  - name: libportal
-    buildsystem: meson
-    config-opts:
-      - -Ddocs=false
-      - -Dbackends=gtk4
-    sources:
-      - type: archive
-        url: https://github.com/flatpak/libportal/archive/refs/tags/0.6.tar.gz
-        sha256: 8ad326c4f53b7433645dc86d994fef0292bee8adda0fe67db9288ace19250a9c
-
   - name: mesa-demos
     config-opts:
       - --without-glut
@@ -276,8 +267,19 @@ modules:
         sha256: 01e99c94a0184e63e796728af89bfac559795fb2a0d6f506fa900455ca5fff7d
     cleanup:
       - /lib/mesa-demos
+    modules:
+      - shared-modules/glu/glu-9.json
+      - shared-modules/glew/glew.json
 
-  - shared-modules/glew/glew.json
+  - name: libportal
+    buildsystem: meson
+    config-opts:
+      - -Ddocs=false
+      - -Dbackends=gtk4
+    sources:
+      - type: archive
+        url: https://github.com/flatpak/libportal/archive/refs/tags/0.6.tar.gz
+        sha256: 8ad326c4f53b7433645dc86d994fef0292bee8adda0fe67db9288ace19250a9c
 
   - name: inxi
     buildsystem: simple
@@ -287,7 +289,7 @@ modules:
         install -Dm0775 -t /app/bin inxi
     sources:
       - type: archive
-        url: https://github.com/ImageMagick/ImageMagick/archive/3.3.27-1.tar.gz
+        url: https://github.com/smxi/inxi/archive/3.3.27-1.tar.gz
         sha256: 35207195579261ddfe59508fdc92d40902c91230084d2b98b4541a6f4c682f63
   
   # Port Proton deps
@@ -297,8 +299,8 @@ modules:
     buildsystem: meson
     sources:
       - type: archive
-        url: https://github.com/GNOME/zenity/archive/refs/tags/3.44.1.tar.gz
-        sha256: 90b066983c4106e810a8f50dfb1525e787add1d3b1c96313bd7601f934472aae
+        url: https://github.com/GNOME/zenity/archive/refs/tags/3.99.0.tar.gz
+        sha256: b2c8fd9bdda9158f9b7b4ef8f33c97ae6e76806d035ae911c95fbcf9f0ccd6f6
 
   - name: bubblewrap
     buildsystem: meson
