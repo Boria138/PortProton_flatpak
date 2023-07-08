@@ -34,17 +34,10 @@ To compile PortProton as a Flatpak, you'll need both [Flatpak](https://flatpak.o
    ```
 2. Compile the flatpak
    ```sh
-   flatpak-builder --repo=portpoton --force-clean --install-deps-from=flathub build-dir com.castrofidel.portproton.yml
-   ```
-   Or (If you use this method, step three can be skipped)
-   ```sh
-   flatpak install org.gnome.Sdk/x86_64/44 org.gnome.Platform/x86_64/44 org.freedesktop.Sdk.Extension.toolchain-i386/x86_64/22.08 org.gnome.Sdk.Compat.i386
-   ```
-   ```sh
-   flatpak-builder --force-clean --user --install build-dir com.castrofidel.portproton.yml
+   flatpak-builder --repo=portpoton-repo --force-clean --install-deps-from=flathub build-dir com.castrofidel.portproton.yml
    ```
 3. Add the local repo and install the flatpak
    ```sh
-   flatpak remote-add portproton portproton --no-gpg-verify
-   flatpak install portproton com.castrofidel.portproton
+   flatpak remote-add portproton-repo portproton-repo --no-gpg-verify
+   flatpak install portproton-repo com.castrofidel.portproton
    ```
