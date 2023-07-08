@@ -28,16 +28,28 @@ flatpak run com.castrofidel.portproton
 To compile PortProton as a Flatpak, you'll need both [Flatpak](https://flatpak.org/) and [Flatpak Builder](http://docs.flatpak.org/en/latest/flatpak-builder.html) installed. Once you manage that, do the following...
 
 0. Clone this repository and `cd` into it
-1. Add flathub remote
+1. Add the git submodules
+
+   ```sh
+   git submodule init
+   git submodule update
+   ```
+   
+2. Add flathub remote
+
    ```sh
    flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
    ```
-2. Compile the flatpak
+   
+3. Compile the flatpak
+
    ```sh
-   flatpak-builder --repo=portpoton-repo --force-clean --install-deps-from=flathub build-dir com.castrofidel.portproton.yml
+   flatpak-builder --repo=local --force-clean --install-deps-from=flathub build-dir com.castrofidel.portproton.yml
    ```
-3. Add the local repo and install the flatpak
+   
+4. Add the local repo and install the flatpak
+
    ```sh
-   flatpak remote-add portproton-repo portproton-repo --no-gpg-verify
+   flatpak remote-add local local --no-gpg-verify
    flatpak install portproton-repo com.castrofidel.portproton
    ```

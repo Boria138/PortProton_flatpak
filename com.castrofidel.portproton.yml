@@ -39,16 +39,11 @@ finish-args:
   - --filesystem=/media
   # ENV
   - --env=PATH=/app/bin:/usr/bin:/app/utils/bin:/usr/lib/extensions/vulkan/MangoHud/bin/
-  - --env=GST_PLUGIN_SYSTEM_PATH=/app/lib32/gstreamer-1.0:/app/lib/gstreamer-1.0:/usr/lib/i386-linux-gnu/gstreamer-1.0:/usr/lib/x86_64-linux-gnu/gstreamer-1.0
+ # - --env=GST_PLUGIN_SYSTEM_PATH=/app/lib32/gstreamer-1.0:/app/lib/gstreamer-1.0:/usr/lib/i386-linux-gnu/gstreamer-1.0:/usr/lib/x86_64-linux-gnu/gstreamer-1.0
   # System tray icon
   - --talk-name=org.kde.StatusNotifierWatcher
   - --talk-name=org.freedesktop.Flatpak
   - --filesystem=home
-
-inherit-extensions:
-  - org.freedesktop.Platform.GL32
-  - org.freedesktop.Platform.ffmpeg-full
-  - org.freedesktop.Platform.ffmpeg_full.i386
 
 add-extensions:
 
@@ -65,6 +60,28 @@ add-extensions:
     merge-dirs: bin
     no-autodownload: true
     autodelete: true
+
+  org.freedesktop.Platform.GL32:
+    directory: lib/i386-linux-gnu/GL
+    version: '1.4'
+    versions: 22.08;1.4
+    subdirectories: true
+    no-autodownload: true
+    autodelete: false
+    add-ld-path: lib
+    merge-dirs: vulkan/icd.d;glvnd/egl_vendor.d;OpenCL/vendors;lib/dri;lib/d3d;vulkan/explicit_layer.d;vulkan/implicit_layer.d
+    download-if: active-gl-driver
+    enable-if: active-gl-driver
+
+  org.freedesktop.Platform.VAAPI.Intel.i386:
+    directory: lib/i386-linux-gnu/dri/intel-vaapi-driver
+    version: '22.08'
+    versions: '22.08'
+    autodelete: false
+    no-autodownload: true
+    add-ld-path: lib
+    download-if: have-intel-gpu
+    autoprune-unless: have-intel-gpu
 
 x-compat-i386-opts: &compat_i386_opts
   prepend-pkg-config-path: /app/lib32/pkgconfig:/usr/lib/i386-linux-gnu/pkgconfig
@@ -157,6 +174,7 @@ modules:
         mkdir -p /app/utils
         mkdir -p /app/lib/i386-linux-gnu
         mkdir -p /app/lib/i386-linux-gnu/GL
+        mkdir -p /app/lib/i386-linux-gnu/dri/intel-vaapi-driver
         install -Dm644 com.castrofidel.portproton.svg /app/share/icons/hicolor/scalable/apps/com.castrofidel.portproton.svg
         install -Dm644 com.castrofidel.portproton.desktop /app/share/applications/${FLATPAK_ID}.desktop
         install -D portproton -t /app/bin
@@ -240,6 +258,37 @@ modules:
       - type: archive
         url: https://github.com/flatpak/libportal/archive/refs/tags/0.6.tar.gz
         sha256: 8ad326c4f53b7433645dc86d994fef0292bee8adda0fe67db9288ace19250a9c
+
+  - name: mesa-demos
+    config-opts:
+      - --without-glut
+      - --bindir=/app/lib/mesa-demos
+    make-args:
+      - -C
+      - src/xdemos
+      - glxinfo
+    no-make-install: true
+    build-commands:
+      - install -D src/xdemos/glxinfo -t /app/bin/
+    sources:
+      - type: archive
+        url: https://mesa.freedesktop.org/archive/demos/mesa-demos-8.4.0.tar.bz2
+        sha256: 01e99c94a0184e63e796728af89bfac559795fb2a0d6f506fa900455ca5fff7d
+    cleanup:
+      - /lib/mesa-demos
+
+  - shared-modules/glew/glew.json
+
+  - name: inxi
+    buildsystem: simple
+    build-commands:
+      - |
+        set -e
+        install -Dm0775 -t /app/bin inxi
+    sources:
+      - type: archive
+        url: https://github.com/ImageMagick/ImageMagick/archive/3.3.27-1.tar.gz
+        sha256: 35207195579261ddfe59508fdc92d40902c91230084d2b98b4541a6f4c682f63
   
   # Port Proton deps
   # ----------------------------------------------------------------------------
@@ -248,8 +297,8 @@ modules:
     buildsystem: meson
     sources:
       - type: archive
-        url: https://github.com/GNOME/zenity/archive/refs/tags/3.99.0.tar.gz
-        sha256: b2c8fd9bdda9158f9b7b4ef8f33c97ae6e76806d035ae911c95fbcf9f0ccd6f6
+        url: https://github.com/GNOME/zenity/archive/refs/tags/3.44.1.tar.gz
+        sha256: 90b066983c4106e810a8f50dfb1525e787add1d3b1c96313bd7601f934472aae
 
   - name: bubblewrap
     buildsystem: meson
