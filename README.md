@@ -1,21 +1,15 @@
-# Castro-Fidel [PortProton's](https://github.com/Castro-Fidel/PortWINE) on Flatpak
+<div align="center">
+  <img src="com.castrofidel.portproton.svg" width="64">
+  <h1 align="center"><a href="https://github.com/Castro-Fidel/">Castro-Fidel</a> PortProton's on Flatpak</h1>
+  <p align="center">A project designed to make it easy and convenient to run Windows games on Linux for both beginners and advanced users. The project strives to make running games (and other software) as easy as possible, but at the same time provides flexible settings for advanced users</p>
+</div>
 
-PortProton is a project designed to make it easy and convenient to run Windows games on Linux for both beginners and advanced users. The project strives to make running games (and other software) as easy as possible, but at the same time provides flexible settings for advanced users
-
-## Installation
+##💻 Installation
 
    ```sh
    flatpak install flathub com.castrofidel.portproton
    ```
    
-Add an alias that allows you to call PortProton using the `portproton` alias:
-
-```sh
-echo "alias portproton='flatpak run com.castrofidel.portproton'" >> ~/.bashrc
-```
-
-**You will need to source the updated file with`. ~/.bashrc` or restart any terminal emulators you have open for the alias to take effect.**
-
 ## Running
 Launch PortProton from your desktop menu, or via command line:
 
@@ -23,7 +17,15 @@ Launch PortProton from your desktop menu, or via command line:
 flatpak run com.castrofidel.portproton
 ```
 
-## Building
+Or add an alias that allows you to call PortProton using the `portproton` alias:
+
+```sh
+echo "alias portproton='flatpak run com.castrofidel.portproton'" >> ~/.bashrc
+```
+
+**You will need to source the updated file with`. ~/.bashrc` or restart any terminal emulators you have open for the alias to take effect.**
+
+##🔨 Building
 
 To compile PortProton as a Flatpak, you'll need both [Flatpak](https://flatpak.org/) and [Flatpak Builder](http://docs.flatpak.org/en/latest/flatpak-builder.html) installed. Once you manage that, do the following...
 
