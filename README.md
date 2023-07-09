@@ -23,7 +23,7 @@ Or add an alias that allows you to call PortProton using the `portproton` alias:
 echo "alias portproton='flatpak run com.castrofidel.portproton'" >> ~/.bashrc
 ```
 
-**You will need to source the updated file with`. ~/.bashrc` or restart any terminal emulators you have open for the alias to take effect.**
+**You will need to source the updated file with`~/.bashrc` or restart any terminal emulators you have open for the alias to take effect.**
 
 ## 🔨 Building
 
@@ -53,5 +53,5 @@ To compile PortProton as a Flatpak, you'll need both [Flatpak](https://flatpak.o
 
    ```sh
    flatpak remote-add local local --no-gpg-verify
-   flatpak install portproton-repo com.castrofidel.portproton
+   flatpak install local com.castrofidel.portproton
    ```
