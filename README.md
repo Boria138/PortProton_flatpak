@@ -4,7 +4,7 @@
   <p align="center">A project designed to make it easy and convenient to run Windows games on Linux for both beginners and advanced users. The project strives to make running games (and other software) as easy as possible, but at the same time provides flexible settings for advanced users</p>
 </div>
 
-##💻 Installation
+## 💻 Installation
 
    ```sh
    flatpak install flathub com.castrofidel.portproton
@@ -25,7 +25,7 @@ echo "alias portproton='flatpak run com.castrofidel.portproton'" >> ~/.bashrc
 
 **You will need to source the updated file with`. ~/.bashrc` or restart any terminal emulators you have open for the alias to take effect.**
 
-##🔨 Building
+## 🔨 Building
 
 To compile PortProton as a Flatpak, you'll need both [Flatpak](https://flatpak.org/) and [Flatpak Builder](http://docs.flatpak.org/en/latest/flatpak-builder.html) installed. Once you manage that, do the following...
 
