@@ -17,6 +17,14 @@
       PortProton – это проект, разработанный для того, чтобы сделать легким и удобным запуск Windows игр на Linux как для начинающих, так и для продвинутых пользователей. Проект стремится сделать запуск игр (и другого программного обеспечения) максимально простым, но в то же время предоставляет гибкие настройки для продвинутых пользователей
     </p>
   </description>
+
+  <screenshots>
+    <screenshot type="default">https://raw.githubusercontent.com/Boria138/PortProton_flatpak/main/screenshots/auto_install.png</screenshot>
+    <screenshot>https://raw.githubusercontent.com/Boria138/PortProton_flatpak/main/screenshots/emulators.png</screenshot>
+    <screenshot>https://raw.githubusercontent.com/Boria138/PortProton_flatpak/main/screenshots/portproton_settings.png</screenshot>
+    <screenshot>https://raw.githubusercontent.com/Boria138/PortProton_flatpak/main/screenshots/wine_settings.png</screenshot>
+  </screenshots>
+  
   <categories>
     <category>Game</category>
   </categories> 
