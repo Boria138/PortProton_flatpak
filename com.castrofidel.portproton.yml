@@ -74,16 +74,6 @@ add-extensions:
     download-if: active-gl-driver
     enable-if: active-gl-driver
 
-  org.freedesktop.Platform.VAAPI.Intel.i386:
-    directory: lib/i386-linux-gnu/dri/intel-vaapi-driver
-    version: '22.08'
-    versions: '22.08'
-    autodelete: false
-    no-autodownload: true
-    add-ld-path: lib
-    download-if: have-intel-gpu
-    autoprune-unless: have-intel-gpu
-
 x-compat-i386-opts: &compat_i386_opts
   prepend-pkg-config-path: /app/lib32/pkgconfig:/usr/lib/i386-linux-gnu/pkgconfig
   ldflags: -L/app/lib32
@@ -175,7 +165,6 @@ modules:
         mkdir -p /app/utils
         mkdir -p /app/lib/i386-linux-gnu
         mkdir -p /app/lib/i386-linux-gnu/GL
-        mkdir -p /app/lib/i386-linux-gnu/dri/intel-vaapi-driver
         install -Dm644 com.castrofidel.portproton.svg /app/share/icons/hicolor/scalable/apps/com.castrofidel.portproton.svg
         install -Dm644 com.castrofidel.portproton.desktop /app/share/applications/${FLATPAK_ID}.desktop
         install -D portproton -t /app/bin
@@ -299,8 +288,8 @@ modules:
     buildsystem: meson
     sources:
       - type: archive
-        url: https://github.com/GNOME/zenity/archive/refs/tags/3.99.0.tar.gz
-        sha256: b2c8fd9bdda9158f9b7b4ef8f33c97ae6e76806d035ae911c95fbcf9f0ccd6f6
+        url: https://github.com/GNOME/zenity/archive/refs/tags/3.44.1.tar.gz
+        sha256: 90b066983c4106e810a8f50dfb1525e787add1d3b1c96313bd7601f934472aae
 
   - name: bubblewrap
     buildsystem: meson

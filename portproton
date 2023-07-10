@@ -9,12 +9,11 @@ export port_ver=1.0
 export NO_AT_BRIDGE=1
 ENG_LANG="English"
 RUS_LANG="Russian"
-export PW_SILENT_INSTALL="1"
 [ -z "${LANG}" ] && export LANG=C
 my_dir=$(dirname "$(readlink -f "$0")")
 if [ "$my_dir" == "/app/bin" ] ; then
 	if [ -f "${XDG_DATA_HOME}/scripts/start.sh" ] ; then
-		 bash "${XDG_DATA_HOME}/scripts/start.sh" "$@"
+		/usr/bin/env bash "${XDG_DATA_HOME}/scripts/start.sh" "$@"
 		exit 0
 	else
 		if [ -n "$(locale | grep "LANG=ru_RU.UTF-8")" ] ; then
@@ -27,25 +26,49 @@ if [ "$my_dir" == "/app/bin" ] ; then
 	fi
 fi
 ########################################################################
-export INSTALLING_PORT=1
-########################################################################
 cd "$my_dir"
 export links
 links="$(pwd)"
 ########################################################################
-scripts_dir="${XDG_DATA_HOME}/scripts"
-rm -fr "${XDG_DATA_HOME}/tmp"
-rm -f "${scripts_dir}/"* > /dev/null 2>&1
+PW_SET_LANG=$(zenity --title  "Install $portname" --text "Select installation language:" --list --radiolist \
+--column="" --column "Language" \
+	TRUE  "$RUS_LANG" \
+	FALSE "$ENG_LANG" ) 2> /dev/null
+	if [ $? -eq 1 ] ; then echo "Installation language not set!" && exit 1 ; fi
+	case $PW_SET_LANG in
+		"$RUS_LANG")
+			INFO_TEXT="Вы запустили установщик ${portname} версии ${port_ver}. \n\nЭто некоммерческий продукт и развивается исключительно за идею и Ваши пожертвования. \nВсе права стороннего программного обеспечения принадлежат их владельцам! \nПродолжая установку, Вы автоматически соглашаетесь с данными условиями." > /dev/null 2>&1 ;;
+		"$ENG_LANG")
+			INFO_TEXT="You’ve started ${portname} installer v.${port_ver}. \n\nIt is a non-commercial product and is developed only for the idea and with the help of your donations. \nAll third-party software rights belong to their respective owners! \nIf you continue installation, you agree to these terms." > /dev/null 2>&1 ;;
+	esac
+	zenity --info --title "INFO" --text "$INFO_TEXT" --no-wrap 2> /dev/null
+	if [ $? -eq 1 ] ; then echo "INFO message not displayed!" && exit 1 ; fi
 ########################################################################
-mkdir -p "${XDG_DATA_HOME}/tmp"
-echo "${port_ver}" > "${XDG_DATA_HOME}/tmp/${portname}_ver"
 case $PW_SET_LANG in
-	"$RUS_LANG") echo "RUS" > "${XDG_DATA_HOME}/tmp/${portname}_loc" ;;
-	"$ENG_LANG") echo "ENG" > "${XDG_DATA_HOME}/tmp/${portname}_loc" ;;
+	"$RUS_LANG")
+		progress_bar() {
+			zenity --progress --title="Установка..." --text="Настройка ${portname}" --pulsate --auto-close --auto-kill --width=450 > /dev/null 2>&1
+		} ;;
+	"$ENG_LANG")
+		progress_bar() {
+			zenity --progress --title="Install..." --text="Install ${portname}" --pulsate --auto-close --auto-kill --width=450 > /dev/null 2>&1
+		} ;;
 esac
 ########################################################################
-export PORT_WINE_TMP_PATH="${XDG_DATA_HOME}/tmp"
-cd "${XDG_DATA_HOME}"
+export PORT_WINE_PATH="${XDG_DATA_HOME}"
+scripts_dir="${PORT_WINE_PATH}/scripts"
+rm -fr "${PORT_WINE_PATH}/tmp"
+rm -f "${scripts_dir}/"* > /dev/null 2>&1
+########################################################################
+mkdir -p "${PORT_WINE_PATH}/tmp"
+echo "${port_ver}" > "${PORT_WINE_PATH}/tmp/${portname}_ver"
+case $PW_SET_LANG in
+	"$RUS_LANG") echo "RUS" > "${PORT_WINE_PATH}/tmp/${portname}_loc" ;;
+	"$ENG_LANG") echo "ENG" > "${PORT_WINE_PATH}/tmp/${portname}_loc" ;;
+esac
+########################################################################
+export PORT_WINE_TMP_PATH="${PORT_WINE_PATH}/tmp"
+cd "${PORT_WINE_PATH}"
 try_download_scripts () {
 	wget -O "${PORT_WINE_TMP_PATH}/PortWINE-master.tar.gz" -nd -c --read-timeout 300 \
 	--retry-connrefused --timeout 15 --tries 3 \
@@ -54,8 +77,7 @@ try_download_scripts () {
 	if [ "$?" = "0" ] ; then
 		tar -xvzf "${PORT_WINE_TMP_PATH}/PortWINE-master.tar.gz" -C "${PORT_WINE_TMP_PATH}"
 		if [ "$?" = "0" ] ; then
-			[ ! -d "${XDG_DATA_HOME}" ]
-			cp -fr "${PORT_WINE_TMP_PATH}/PortWINE-master/data_from_portwine/"* "${XDG_DATA_HOME}"
+			cp -fr "${PORT_WINE_TMP_PATH}/PortWINE-master/data_from_portwine/"* "${PORT_WINE_PATH}"
 			rm -f "${PORT_WINE_TMP_PATH}/PortWINE-master.tar.gz"
 			rm -fr "${PORT_WINE_TMP_PATH}/PortWINE-master/"
 			export scripts_current_ver
@@ -69,8 +91,5 @@ try_download_scripts () {
 		try_download_scripts
 	fi
 }
-if [ "${PW_SILENT_INSTALL}" = "1" ] && [ ! -f "/usr/bin/portproton" ] ; then
-	try_download_scripts
-else
-	try_download_scripts | progress_bar
-fi
+try_download_scripts | progress_bar
+########################################################################

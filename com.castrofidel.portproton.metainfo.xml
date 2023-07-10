@@ -33,7 +33,7 @@
   <launchable type="desktop-id">com.castrofidel.portproton.desktop</launchable>
 
   <url type="bugtracker">https://github.com/Castro-Fidel/PortWINE/issues</url>
-  <url type="donation">https://boosty.to/portwine-linux.ru</url>
+  <url type="donation">https://linux-gaming.ru/donate/</url>
   <url type="homepage">https://linux-gaming.ru</url>
   <url type="translate">https://github.com/Castro-Fidel/PortWINE/blob/master/data_from_portwine/scripts/lang</url>
   <url type="vcs-browser">https://github.com/Castro-Fidel/PortWINE</url>
