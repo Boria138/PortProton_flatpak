@@ -27,7 +27,7 @@ echo "alias portproton='flatpak run com.castrofidel.portproton'" >> ~/.bashrc
 
 ## 🔨 Building
 
-To compile PortProton as a Flatpak, you'll need both [Flatpak](https://flatpak.org/) and [Flatpak Builder](http://docs.flatpak.org/en/latest/flatpak-builder.html) installed. Once you manage that, do the following...
+To compile PortProton as a Flatpak, you'll need both [Flatpak](https://flatpak.org/setup/) and [Flatpak Builder](http://docs.flatpak.org/en/latest/flatpak-builder.html) installed. Once you manage that, do the following...
 
 0. Clone this repository and `cd` into it
 1. Add the git submodules

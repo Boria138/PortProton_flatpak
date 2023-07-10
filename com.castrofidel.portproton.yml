@@ -47,11 +47,10 @@ finish-args:
   - --filesystem=home
 
 add-extensions:
-
   org.gnome.Platform.Compat.i386:
     directory: lib/i386-linux-gnu
-    version: "44"
-    
+    version: '44'
+
   com.valvesoftware.Steam.Utility:
     subdirectories: true
     directory: utils
@@ -74,6 +73,10 @@ add-extensions:
     download-if: active-gl-driver
     enable-if: active-gl-driver
 
+sdk-extensions:
+  - org.gnome.Sdk.Compat.i386
+  - org.freedesktop.Sdk.Extension.toolchain-i386
+
 x-compat-i386-opts: &compat_i386_opts
   prepend-pkg-config-path: /app/lib32/pkgconfig:/usr/lib/i386-linux-gnu/pkgconfig
   ldflags: -L/app/lib32
@@ -82,10 +85,6 @@ x-compat-i386-opts: &compat_i386_opts
     CC: i686-unknown-linux-gnu-gcc
     CXX: i686-unknown-linux-gnu-g++
   libdir: /app/lib32
-  
-sdk-extensions:
-  - org.gnome.Sdk.Compat.i386
-  - org.freedesktop.Sdk.Extension.toolchain-i386
 
 cleanup:
   - /include
