@@ -14,7 +14,6 @@ finish-args:
   - --allow=per-app-dev-shm
   - --device=all
   - --share=network
-  - --system-talk-name=org.freedesktop.NetworkManager
   - --allow=multiarch
   # For Wine crash handling
   - --allow=devel
@@ -30,6 +29,8 @@ finish-args:
   - --filesystem=~/.local/share/applications:create
   # Wine uses UDisks2 to enumerate disk drives
   - --system-talk-name=org.freedesktop.UDisks2
+  - --talk-name=org.gnome.Mutter.DisplayConfig
+  - --system-talk-name=org.freedesktop.NetworkManager
   # For mangohud config
   - --filesystem=xdg-config/MangoHud:ro
   # Should fix access to SD card on the deck
@@ -102,14 +103,21 @@ modules:
   # Tools
   # ----------------------------------------------------------------------------
   
-  - name: xmu
+  - name: libxmu
     buildsystem: autotools
-    config-opts:
+    config-opts: &libxmu_config_opts
       - --disable-static
-    sources:
+    sources: &libxmu_sources
       - type: archive
         url: https://www.x.org/releases/individual/lib/libXmu-1.1.4.tar.gz
         sha256: 3091d711cdc1d8ea0f545a13b90d1464c3c3ab64778fd121f0d789b277a80289
+
+  - name: libxmu-32bit
+    build-options:
+      arch:
+        x86_64: *compat_i386_opts
+    config-opts: *libxmu_config_opts
+    sources: *libxmu_sources
 
   - name: xrdb
     buildsystem: autotools
@@ -222,7 +230,6 @@ modules:
           type: anitya
           project-id: 245
           url-template: https://www.cabextract.org.uk/cabextract-$version.tar.gz
-
         
   # Libraries
   # ----------------------------------------------------------------------------
@@ -237,6 +244,19 @@ modules:
       - type: archive
         url: https://github.com/ImageMagick/ImageMagick/archive/7.1.1-12.tar.gz
         sha256: 51567d11fcbca5bd591d191ce9fdf821e2ed1b12c1ad8bc2a2f13da5c6313f33
+
+  - name: libportal
+    buildsystem: meson
+    config-opts:
+      - -Ddocs=false
+      - -Dbackends=gtk4
+    sources:
+      - type: archive
+        url: https://github.com/flatpak/libportal/archive/refs/tags/0.6.tar.gz
+        sha256: 8ad326c4f53b7433645dc86d994fef0292bee8adda0fe67db9288ace19250a9c
+
+  # Standalone utilities
+  # ----------------------------------------------------------------------------
 
   - name: mesa-demos
     config-opts:
@@ -259,15 +279,32 @@ modules:
       - shared-modules/glu/glu-9.json
       - shared-modules/glew/glew.json
 
-  - name: libportal
-    buildsystem: meson
-    config-opts:
-      - -Ddocs=false
-      - -Dbackends=gtk4
+  - name: perl
     sources:
       - type: archive
-        url: https://github.com/flatpak/libportal/archive/refs/tags/0.6.tar.gz
-        sha256: 8ad326c4f53b7433645dc86d994fef0292bee8adda0fe67db9288ace19250a9c
+        url: https://www.cpan.org/src/5.0/perl-5.34.0.tar.gz
+        sha256: 551efc818b968b05216024fb0b727ef2ad4c100f8cb6b43fab615fa78ae5be9a
+      - type: script
+        dest-filename: configure
+        commands:
+          - ./Configure -des -Dprefix=/app
+    post-install:
+      - find /app/lib/perl5 -type f -exec chmod u+w {} \;
+
+  - name: pciutils
+    no-autogen: true
+    make-args:
+      - SHAREDIR=/app/share/hwdata
+      - OPT=-O2 -g
+    make-install-args:
+      - PREFIX=/app
+      - SBINDIR=/app/bin
+      - SHAREDIR=/app/share/hwdata
+      - MANDIR=/app/share/man
+    sources:
+      - type: archive
+        url: https://mirrors.edge.kernel.org/pub/software/utils/pciutils/pciutils-3.7.0.tar.gz
+        sha256: 2432e7a2e12000502d36cf769ab6e5a0cf4931e5050ccaf8b02984b2d3cb0948
 
   - name: inxi
     buildsystem: simple
@@ -279,6 +316,12 @@ modules:
       - type: archive
         url: https://github.com/smxi/inxi/archive/3.3.27-1.tar.gz
         sha256: 35207195579261ddfe59508fdc92d40902c91230084d2b98b4541a6f4c682f63
+
+  - name: xrandr
+    sources:
+      - type: archive
+        url: https://xorg.freedesktop.org/archive/individual/app/xrandr-1.5.2.tar.gz
+        sha256: efd062cd228dc18a7de26422c81bc4be6a7e62f7f0ad6f9bebdd9ff8385c5668
   
   # Port Proton deps
   # ----------------------------------------------------------------------------
@@ -287,9 +330,11 @@ modules:
     buildsystem: meson
     sources:
       - type: archive
-        url: https://github.com/GNOME/zenity/archive/refs/tags/3.44.1.tar.gz
-        sha256: 90b066983c4106e810a8f50dfb1525e787add1d3b1c96313bd7601f934472aae
+        url: https://download.gnome.org/sources/zenity/3.41/zenity-3.41.0.tar.xz
+        sha256: 19b676c3510e22badfcc3204062d432ba537402f5e0ae26128c0d90c954037e1
 
+  - shared-modules/libappindicator/libappindicator-gtk3-introspection-12.10.json
+        
   - name: bubblewrap
     buildsystem: meson
     sources:
