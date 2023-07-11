@@ -2,6 +2,8 @@ app-id: com.castrofidel.portproton
 sdk: org.gnome.Sdk
 runtime: org.gnome.Platform
 runtime-version: "44"
+base: org.winehq.Wine
+base-version: stable-22.08
 command: portproton
 separate-locales: false
 
@@ -47,6 +49,9 @@ finish-args:
   - --talk-name=org.freedesktop.Flatpak
   - --filesystem=home
 
+inherit-extensions:
+  - org.freedesktop.Platform.GL32
+
 add-extensions:
   org.gnome.Platform.Compat.i386:
     directory: lib/i386-linux-gnu
@@ -61,15 +66,6 @@ add-extensions:
     merge-dirs: bin
     no-autodownload: true
     autodelete: true
-
-  org.freedesktop.Platform.GL32:
-    directory: lib/i386-linux-gnu/GL
-    version: '1.4'
-    versions: 22.08;1.4
-    subdirectories: true
-    autodelete: false
-    add-ld-path: lib
-    merge-dirs: vulkan/icd.d;glvnd/egl_vendor.d;OpenCL/vendors;lib/dri;lib/d3d;vulkan/explicit_layer.d;vulkan/implicit_layer.d
 
 sdk-extensions:
   - org.gnome.Sdk.Compat.i386
@@ -255,26 +251,34 @@ modules:
   # Standalone utilities
   # ----------------------------------------------------------------------------
 
-  - name: mesa-demos
-    config-opts:
-      - --without-glut
-      - --bindir=/app/lib/mesa-demos
-    make-args:
-      - -C
-      - src/xdemos
-      - glxinfo
-    no-make-install: true
-    build-commands:
-      - install -D src/xdemos/glxinfo -t /app/bin/
-    sources:
+  - name: glu
+    config-opts: &glu_config_opts
+      - --disable-static
+    sources: &glu_sources
       - type: archive
-        url: https://mesa.freedesktop.org/archive/demos/mesa-demos-8.4.0.tar.bz2
-        sha256: 01e99c94a0184e63e796728af89bfac559795fb2a0d6f506fa900455ca5fff7d
-    cleanup:
-      - /lib/mesa-demos
-    modules:
-      - shared-modules/glu/glu-9.json
-      - shared-modules/glew/glew.json
+        url: https://mesa.freedesktop.org/archive/glu/glu-9.0.2.tar.xz
+        sha256: 6e7280ff585c6a1d9dfcdf2fca489251634b3377bfc33c29e4002466a38d02d4
+        x-checker-data:
+          type: anitya
+          project-id: 13518
+          stable-only: true
+          url-template: https://mesa.freedesktop.org/archive/glu/glu-$version.tar.xz
+
+  - name: glu-32bit
+    build-options:
+      arch:
+        x86_64: *compat_i386_opts
+    config-opts: *glu_config_opts
+    sources: *glu_sources
+
+  - name: OpenCL
+    buildsystem: simple
+    build-commands:
+      - cp -av CL $FLATPAK_DEST/include/
+    sources:
+      - type: git
+        url: https://github.com/KhronosGroup/OpenCL-Headers.git
+        commit: 9fac4e9866a961f66bdd72fa2bff50145512f972
 
   - name: perl
     sources:
@@ -319,6 +323,26 @@ modules:
       - type: archive
         url: https://xorg.freedesktop.org/archive/individual/app/xrandr-1.5.2.tar.gz
         sha256: efd062cd228dc18a7de26422c81bc4be6a7e62f7f0ad6f9bebdd9ff8385c5668
+
+  - name: mesa-demos
+    config-opts:
+      - --without-glut
+      - --bindir=/app/lib/mesa-demos
+    make-args:
+      - -C
+      - src/xdemos
+      - glxinfo
+    no-make-install: true
+    build-commands:
+      - install -D src/xdemos/glxinfo -t /app/bin/
+    sources:
+      - type: archive
+        url: https://mesa.freedesktop.org/archive/demos/mesa-demos-8.4.0.tar.bz2
+        sha256: 01e99c94a0184e63e796728af89bfac559795fb2a0d6f506fa900455ca5fff7d
+    cleanup:
+      - /lib/mesa-demos
+    modules:
+      - shared-modules/glew/glew.json
   
   # Port Proton deps
   # ----------------------------------------------------------------------------
@@ -327,8 +351,8 @@ modules:
     buildsystem: meson
     sources:
       - type: archive
-        url: https://download.gnome.org/sources/zenity/3.41/zenity-3.41.0.tar.xz
-        sha256: 19b676c3510e22badfcc3204062d432ba537402f5e0ae26128c0d90c954037e1
+        url: https://github.com/GNOME/zenity/archive/refs/tags/3.44.1.tar.gz
+        sha256: 90b066983c4106e810a8f50dfb1525e787add1d3b1c96313bd7601f934472aae
         
   - name: bubblewrap
     buildsystem: meson
