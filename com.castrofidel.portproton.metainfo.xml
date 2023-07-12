@@ -19,17 +19,11 @@
   </description>
 
   <screenshots>
-    <screenshot type="default">https://raw.githubusercontent.com/Boria138/PortProton_flatpak/main/screenshots/auto_install_en.png</screenshot>
-    <screenshot>https://raw.githubusercontent.com/Boria138/PortProton_flatpak/main/screenshots/emulators_en.png</screenshot>
-    <screenshot>https://raw.githubusercontent.com/Boria138/PortProton_flatpak/main/screenshots/wine_settings_en.png</screenshot>
-    <screenshot>https://raw.githubusercontent.com/Boria138/PortProton_flatpak/main/screenshots/portproton_settings_en.png</screenshot>
-    <screenshot>https://raw.githubusercontent.com/Boria138/PortProton_flatpak/main/screenshots/installed_en.png</screenshot>
-
-    <screenshot xml:lang="ru" type="default">https://raw.githubusercontent.com/Boria138/PortProton_flatpak/main/screenshots/auto_install_ru.png</screenshot>
-    <screenshot xml:lang="ru">https://raw.githubusercontent.com/Boria138/PortProton_flatpak/main/screenshots/emulators_ru.png</screenshot>
-    <screenshot xml:lang="ru">https://raw.githubusercontent.com/Boria138/PortProton_flatpak/main/screenshots/wine_settings_ru.png</screenshot>
-    <screenshot xml:lang="ru">https://raw.githubusercontent.com/Boria138/PortProton_flatpak/main/screenshots/portproton_settings_ru.png</screenshot>
-    <screenshot>https://raw.githubusercontent.com/Boria138/PortProton_flatpak/main/screenshots/installed_ru.png</screenshot>     
+    <screenshot type="default">https://raw.githubusercontent.com/Boria138/PortProton_flatpak/main/screenshots/auto_install.png</screenshot>
+    <screenshot>https://raw.githubusercontent.com/Boria138/PortProton_flatpak/main/screenshots/emulators.png</screenshot>
+    <screenshot>https://raw.githubusercontent.com/Boria138/PortProton_flatpak/main/screenshots/wine_settings.png</screenshot>
+    <screenshot>https://raw.githubusercontent.com/Boria138/PortProton_flatpak/main/screenshots/portproton_settings.png</screenshot>
+    <screenshot>https://raw.githubusercontent.com/Boria138/PortProton_flatpak/main/screenshots/installed.png</screenshot>
   </screenshots>
   
   <categories>

@@ -197,6 +197,7 @@ modules:
     config-opts:
       - -DGLSLANG_INSTALL_DIR=/app
       - -DVULKAN_HEADERS_INSTALL_DIR=/app
+      - -DBUILD_ICD=OFF
       - -DCMAKE_BUILD_TYPE=Release
     sources:
       - type: git
@@ -270,15 +271,6 @@ modules:
         x86_64: *compat_i386_opts
     config-opts: *glu_config_opts
     sources: *glu_sources
-
-  - name: OpenCL
-    buildsystem: simple
-    build-commands:
-      - cp -av CL $FLATPAK_DEST/include/
-    sources:
-      - type: git
-        url: https://github.com/KhronosGroup/OpenCL-Headers.git
-        commit: 9fac4e9866a961f66bdd72fa2bff50145512f972
 
   - name: perl
     sources:
