@@ -47,7 +47,6 @@ finish-args:
   # System tray icon
   - --talk-name=org.kde.StatusNotifierWatcher
   - --talk-name=org.freedesktop.Flatpak
-  - --filesystem=home
 
 inherit-extensions:
   - org.freedesktop.Platform.GL32  
@@ -56,16 +55,6 @@ add-extensions:
   org.gnome.Platform.Compat.i386:
     directory: lib/i386-linux-gnu
     version: '44'
-
-  com.valvesoftware.Steam.Utility:
-    subdirectories: true
-    directory: utils
-    version: stable
-    versions: stable;beta;test
-    add-ld-path: lib
-    merge-dirs: bin
-    no-autodownload: true
-    autodelete: true
 
 sdk-extensions:
   - org.gnome.Sdk.Compat.i386
@@ -268,15 +257,6 @@ modules:
 
   # Standalone utilities
   # ----------------------------------------------------------------------------
-
-  - name: lsb_release
-    buildsystem: simple
-    build-commands:
-      - cp -rf lsb_release/src/lsb_release /app/bin
-    sources:
-      - type: git
-        url: https://github.com/LinuxStandardBase/lsb-samples
-        commit: a25a4fcd73c79bd5af0dd8d948a7c96dcbfd2d07
 
   - name: glu
     config-opts: &glu_config_opts
