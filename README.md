@@ -6,7 +6,7 @@
 
 ## ⚠️ Attention
 ### The project is under development
-####The flathub package installation section is here for demonstration purposes only at the moment it is only possible to build the package via flatpak builder
+#### The flathub package installation section is here for demonstration purposes only at the moment it is only possible to build the package via flatpak builder
 
 ## 💻 Installation
 
