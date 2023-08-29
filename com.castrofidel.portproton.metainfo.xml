@@ -75,62 +75,6 @@
 	  https://raw.githubusercontent.com/Boria138/PortProton_flatpak/main/screenshots/edit_db.png
 	</image>
 	</screenshot>
-    <screenshot type="default">
-	  <caption>
-	    Auto Install
-	  </caption>
-	<image xml:lang="ru">
-	  https://raw.githubusercontent.com/Boria138/PortProton_flatpak/main/screenshots/auto_install_ru.png
-	</image>
-    </screenshot>
-    <screenshot>
-	  <caption>
-	    Emulators
-	   </caption>
-	<image xml:lang="ru">
-	  https://raw.githubusercontent.com/Boria138/PortProton_flatpak/main/screenshots/emulators_ru.png
-	</image>
-    </screenshot>
-	<screenshot>
-	  <caption>
-	    Wine Settings
-	  </caption>
-    <image xml:lang="ru">
-	  https://raw.githubusercontent.com/Boria138/PortProton_flatpak/main/screenshots/wine_settings_ru.png
-	</image>
-	</screenshot>
-	<screenshot>
-	  <caption>
-	    PortProton Settings
-	  </caption>
-    <image xml:lang="ru">
-	  https://raw.githubusercontent.com/Boria138/PortProton_flatpak/main/screenshots/portproton_settings_ru.png
-	</image>
-	</screenshot>
-	<screenshot>
-      <caption>
-	    Installed
-	  </caption>
-    <image xml:lang="ru">
-	  https://raw.githubusercontent.com/Boria138/PortProton_flatpak/main/screenshots/installed_ru.png
-	</image>
-	</screenshot>
-	<screenshot>
-      <caption>
-	    App Menu
-	  </caption>
-    <image xml:lang="ru">
-	  https://raw.githubusercontent.com/Boria138/PortProton_flatpak/main/screenshots/app_menu_ru.png
-	</image>
-	</screenshot>
-	<screenshot>
-      <caption>
-	    Edit DB
-	  </caption>
-    <image xml:lang="ru">
-	  https://raw.githubusercontent.com/Boria138/PortProton_flatpak/main/screenshots/edit_db_ru.png
-	</image>
-	</screenshot>
   </screenshots>
   
   <categories>
