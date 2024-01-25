@@ -37,6 +37,7 @@ finish-args:
   # For Debian
   - --filesystem=/media
   - --filesystem=~/.var/app/com.valvesoftware.Steam:ro
+   - --filesystem=home
   # ENV
   - --env=PATH=/app/bin:/usr/bin:/app/utils/bin:/usr/lib/extensions/vulkan/MangoHud/bin/:/usr/lib/extensions/vulkan/gamescope/bin:/usr/lib/extensions/vulkan/OBSVkCapture/bin
   # See: https://github.com/flathub/net.lutris.Lutris/pull/368#issuecomment-1751381312
@@ -273,9 +274,14 @@ modules:
     config-opts:
       - --datarootdir=/app/share
     sources:
-      - type: archive
-        url: https://github.com/vcrhonek/hwdata/archive/refs/tags/v0.349.tar.gz
-        sha256: 2591ebf85b36e6d953360a003b2991fc0a0c2c35d3fdbd3133f435098b0af3da
+      - type: git
+        url: https://github.com/vcrhonek/hwdata
+        tag: v0.378
+        commit: 5580883256f77cfba526ebd81caa504e61047d87
+        x-checker-data:
+          type: json
+          url: https://api.github.com/repos/vcrhonek/hwdata/releases/latest
+          tag-query: .tag_name
 
   - name: pciutils
     no-autogen: true
