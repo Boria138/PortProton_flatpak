@@ -36,8 +36,11 @@ finish-args:
   - --filesystem=/run/udev:ro
   # For Debian
   - --filesystem=/media
-  - --filesystem=~/.var/app/com.valvesoftware.Steam:ro
-   - --filesystem=home
+  # Permissions to grant access to Steam installation
+  - --filesystem=~/.var/app/com.valvesoftware.Steam
+  - --filesystem=~/.local/share/Steam
+  - --filesystem=~/.steam
+  - --filesystem=home
   # ENV
   - --env=PATH=/app/bin:/usr/bin:/app/utils/bin:/usr/lib/extensions/vulkan/MangoHud/bin/:/usr/lib/extensions/vulkan/gamescope/bin:/usr/lib/extensions/vulkan/OBSVkCapture/bin
   # See: https://github.com/flathub/net.lutris.Lutris/pull/368#issuecomment-1751381312
@@ -85,9 +88,57 @@ cleanup:
     
 modules:
 
-  # Tools
-  # ----------------------------------------------------------------------------
-  
+  - name: intltool
+    cleanup:
+      - '*'
+    sources:
+      - type: archive
+        url: https://launchpad.net/intltool/trunk/0.51.0/+download/intltool-0.51.0.tar.gz
+        sha256: 67c74d94196b153b774ab9f89b2fa6c6ba79352407037c8c14d5aeb334e959cd
+    x-checker-data:
+      type: anitya
+      project-id: 1385
+      stable-only: true
+      url-template: https://launchpad.net/intltool/trunk/$version/+download/intltool-$version.tar.gz
+
+  - name: yad
+    config-opts:
+        - --enable-standalone
+        - --disable-icon-browser
+        - --disable-tools
+    sources:
+        - type: archive
+          url: https://github.com/v1cont/yad/releases/download/v13.0/yad-13.0.tar.xz
+          sha256: 194198c4a58e20ceffd9a3206633c3726d962d7d4219edb77aeb748897403e34
+          x-checker-data:
+            type: anitya
+            project-id: 5280
+            stable-only: true
+            url-template: https://github.com/v1cont/yad/releases/download/v$version/yad-$version.tar.xz
+
+  - name: openssl-1.1
+    buildsystem: simple
+    build-commands:
+      - |
+        set -e
+        ./config --prefix=/app
+        make
+        make install
+    cleanup:
+        # Don't mask CLI tools provided by runtime - we just want the versioned shared library
+        - /bin
+        # Don't mask unversion library symlinks from library
+        - /lib/libcrypto.so
+        - /lib/libssl.so
+    sources:
+      - type: archive
+        url: https://www.openssl.org/source/openssl-1.1.1w.tar.gz
+        sha256: cf3098950cb4d853ad95c0841f1f9c6d3dc102dccfcacd521d93925208b76ac8
+        x-checker-data:
+            type: anitya
+            project-id: 20333
+            url-template: https://www.openssl.org/source/openssl-$version.tar.gz
+
   - name: libxmu
     config-opts: &libxmu_config_opts
       - --disable-static
@@ -107,8 +158,52 @@ modules:
     buildsystem: autotools
     sources:
       - type: archive
-        url: https://www.x.org/releases/individual/app/xrdb-1.2.2.tar.gz
+        url: https://xorg.freedesktop.org/releases/individual/app/xrdb-1.2.2.tar.gz
         sha256: db2d774a35ae2f7e7ac61cc2de0dcae27fc2aa14399c35721f8300e63ea73549
+        x-checker-data:
+          type: anitya
+          project-id: 14956
+          url-template: https://xorg.freedesktop.org/releases/individual/app/xrdb-$version.tar.gz
+
+  - name: libXaw
+    buildsystem: autotools
+    sources:
+      - type: archive
+        url: https://xorg.freedesktop.org/releases/individual/lib/libXaw-1.0.15.tar.gz
+        sha256: ca8a613884c922985202075b3cc8ee8821bfa83a5eb066189ae3cca131e63972
+        x-checker-data:
+          type: anitya
+          project-id: 1766
+          url-template: https://xorg.freedesktop.org/releases/individual/lib/libXaw-$version.tar.gz
+
+  - name: wmctrl
+    buildsystem: autotools
+    sources:
+      - type: git
+        url: https://github.com/Conservatory/wmctrl.git
+        commit: 7c1dcbaa221a16e8a9765bf2b14d61d640a52304
+
+  - name: xterm
+    config-opts:
+      - --disable-full-tgetent
+    sources:
+      - type: archive
+        url: https://invisible-mirror.net/archives/xterm/xterm-389.tgz
+        sha256: 1cd5763d94d9370fed10d804e831a089b2ace0e7a74b6f56ef5a16a766bde7be
+        x-checker-data:
+            type: anitya
+            project-id: 5272
+            url-template: https://invisible-mirror.net/archives/xterm/xterm-$version.tgz
+
+  - name: p7zip
+    no-autogen: true
+    sources:
+      - type: archive
+        url: https://github.com/p7zip-project/p7zip/archive/v17.04/p7zip-v17.04.tar.gz
+        sha256: ea029a2e21d2d6ad0a156f6679bd66836204aa78148a4c5e498fe682e77127ef
+      - type: shell
+        commands:
+          - sed -i 's|/usr/local|${FLATPAK_DEST}|g' makefile.common
 
   - name: gamemode
     buildsystem: meson
@@ -171,18 +266,23 @@ modules:
     buildsystem: meson
     sources:
       - type: archive
-        url: https://www.freedesktop.org/software/desktop-file-utils/releases/desktop-file-utils-0.26.tar.xz
-        sha256: b26dbde79ea72c8c84fb7f9d870ffd857381d049a86d25e0038c4cef4c747309
+        url: https://www.freedesktop.org/software/desktop-file-utils/releases/desktop-file-utils-0.27.tar.xz
+        sha256: a0817df39ce385b6621880407c56f1f298168c040c2032cedf88d5b76affe836
+        x-checker-data:
+          type: anitya
+          project-id: 421
+          url-template: https://www.freedesktop.org/software/desktop-file-utils/releases/desktop-file-utils-$version.tar.xz
 
   - name: icoutils
     buildsystem: autotools
     sources:
       - type: archive
-        url: http://savannah.nongnu.org/download/icoutils/icoutils-0.32.3.tar.bz2
-        mirror-urls: 
-          - https://download-mirror.savannah.gnu.org/releases/icoutils/icoutils-0.32.3.tar.bz2
-          - https://ftp.up.pt/pub/nongnu/icoutils/icoutils-0.32.3.tar.bz2
+        url: http://download.savannah.gnu.org/releases/icoutils/icoutils-0.32.3.tar.bz2
         sha256: 17abe02d043a253b68b47e3af69c9fc755b895db68fdc8811786125df564c6e0
+        x-checker-data:
+          type: anitya
+          project-id: 1360
+          url-template: http://download.savannah.gnu.org/releases/icoutils/icoutils-$version.tar.bz2
 
   - name: cabextract
     sources:
@@ -194,11 +294,6 @@ modules:
           project-id: 245
           url-template: https://www.cabextract.org.uk/cabextract-$version.tar.gz
 
-  # ----------------------------------------------------------------------------
-
-  # Vulkan
-  # ----------------------------------------------------------------------------
-
   - name: vulkan-tools
     buildsystem: cmake-ninja
     config-opts:
@@ -206,14 +301,13 @@ modules:
       - -DVULKAN_HEADERS_INSTALL_DIR=/app
       - -DCMAKE_BUILD_TYPE=Release
     sources:
-      - type: archive
-        url: https://github.com/KhronosGroup/Vulkan-Tools/archive/refs/tags/sdk-1.3.261.1.tar.gz
-        sha256: 07543d761b5ae53e380fdf7a3f42bd706f2cf1ad04a310381fcf386fefb814c6
-
-  # ----------------------------------------------------------------------------
-        
-  # Libraries
-  # ----------------------------------------------------------------------------
+      - type: git
+        url: https://github.com/KhronosGroup/Vulkan-Tools.git
+        tag: sdk-1.3.261.1
+        commit: a7da7027ca9fd0901639f02619c226da9c6036f1
+        x-checker-data:
+          type: git
+          tag-pattern: ^sdk-([\d.]+)$
 
   - name: ImageMagick
     config-opts:
@@ -244,11 +338,6 @@ modules:
           type: git
           is-important: true
           tag-pattern: ^([\d.]+)$
-
-  # ----------------------------------------------------------------------------
-
-  # Standalone utilities
-  # ----------------------------------------------------------------------------
 
   - name: glu
     config-opts: &glu_config_opts
@@ -353,11 +442,6 @@ modules:
     modules:
       - shared-modules/glew/glew.json
 
-  # ----------------------------------------------------------------------------
-  
-  # PortProton deps
-  # ----------------------------------------------------------------------------
-  
   - name: zenity
     buildsystem: meson
     sources:
@@ -371,5 +455,3 @@ modules:
       - type: archive
         url: https://github.com/containers/bubblewrap/releases/download/v0.8.0/bubblewrap-0.8.0.tar.xz
         sha256: 957ad1149db9033db88e988b12bcebe349a445e1efc8a9b59ad2939a113d333a
-
-  # ----------------------------------------------------------------------------
