@@ -6,6 +6,16 @@
   <summary>Software for playing Microsoft Windows games and launchers</summary>
   <summary xml:lang="ru">Программа для запуска игр и лаунчеров с Microsoft Windows</summary>
 
+<!--  TODO: Developer  -->
+<!--  <developer id="https://linux-gaming.ru">
+        <name>Mikhail Tergoev</name>
+  </developer>-->
+
+  <url type="homepage">https://linux-gaming.ru</url>
+  <url type="bugtracker">https://github.com/Castro-Fidel/PortWINE/issues</url>
+  <url type="donation">https://linux-gaming.ru/2022/09/11/donate/</url>
+  <url type="vcs-browser">https://github.com/Castro-Fidel/PortWINE</url>
+
   <metadata_license>CC0-1.0</metadata_license>
   <project_license>MIT</project_license>
 
@@ -18,64 +28,82 @@
     </p>
   </description>
 
-  <screenshots>
-    <screenshot type="default">
-	  <caption>
-	    Auto Install
-	  </caption>
-	<image>
-	  https://raw.githubusercontent.com/Boria138/PortProton_flatpak/main/screenshots/auto_install.png
-	</image>
-    </screenshot>
-    <screenshot>
-	  <caption>
-	    Emulators
-	   </caption>
-	<image>
-	  https://raw.githubusercontent.com/Boria138/PortProton_flatpak/main/screenshots/emulators.png
-	</image>
-    </screenshot>
-	<screenshot>
-	  <caption>
-	    Wine Settings
-	  </caption>
-    <image>
-	  https://raw.githubusercontent.com/Boria138/PortProton_flatpak/main/screenshots/wine_settings.png
-	</image>
-	</screenshot>
-	<screenshot>
-	  <caption>
-	    PortProton Settings
-	  </caption>
-    <image>
-	  https://raw.githubusercontent.com/Boria138/PortProton_flatpak/main/screenshots/portproton_settings.png
-	</image>
-	</screenshot>
-	<screenshot>
-      <caption>
-	    Installed
-	  </caption>
-    <image>
-	  https://raw.githubusercontent.com/Boria138/PortProton_flatpak/main/screenshots/installed.png
-	</image>
-	</screenshot>
-	<screenshot>
-      <caption>
-	    App Menu
-	  </caption>
-    <image>
-	  https://raw.githubusercontent.com/Boria138/PortProton_flatpak/main/screenshots/app_menu.png
-	</image>
-	</screenshot>
-	<screenshot>
-      <caption>
-	    Edit DB
-	  </caption>
-    <image>
-	  https://raw.githubusercontent.com/Boria138/PortProton_flatpak/main/screenshots/edit_db.png
-	</image>
-	</screenshot>
-  </screenshots>
+  <launchable type="desktop-id">com.castrofidel.portproton.desktop</launchable>
+
+	<screenshots>
+		<screenshot type="default">
+			<caption>
+				Installed
+			</caption>
+			<image>
+				https://raw.githubusercontent.com/Boria138/PortProton_flatpak/main/screenshots/installed.png
+			</image>
+		</screenshot>
+		<screenshot>
+			<caption>
+				Auto Instals
+			</caption>
+			<image>
+				https://raw.githubusercontent.com/Boria138/PortProton_flatpak/main/screenshots/auto_install.png
+			</image>
+		</screenshot>
+		<screenshot>
+			<caption>
+				Emulators Auto Instals
+			</caption>
+			<image>
+				https://raw.githubusercontent.com/Boria138/PortProton_flatpak/main/screenshots/emulators.png
+			</image>
+		</screenshot>
+		<screenshot>
+			<caption>
+				App Menu
+			</caption>
+			<image>
+				https://raw.githubusercontent.com/Boria138/PortProton_flatpak/main/screenshots/app_menu.png
+			</image>
+		</screenshot>
+		<screenshot>
+			<caption>
+				VKBasalt
+			</caption>
+			<image>
+				https://raw.githubusercontent.com/Boria138/PortProton_flatpak/main/screenshots/vkbasalt_settings.png
+			</image>
+		</screenshot>
+		<screenshot>
+			<caption>
+				MangoHud
+			</caption>
+			<image>
+				https://raw.githubusercontent.com/Boria138/PortProton_flatpak/main/screenshots/mangohud_settings.png
+			</image>
+		</screenshot>
+		<screenshot>
+			<caption>
+				Edit DB
+			</caption>
+			<image>
+				https://raw.githubusercontent.com/Boria138/PortProton_flatpak/main/screenshots/edit_db.png
+			</image>
+		</screenshot>
+		<screenshot>
+			<caption>
+				Wine Settings
+			</caption>
+			<image>
+				https://raw.githubusercontent.com/Boria138/PortProton_flatpak/main/screenshots/wine_settings.png
+			</image>
+		</screenshot>
+		<screenshot>
+			<caption>
+				PortProton Settings
+			</caption>
+			<image>
+				https://raw.githubusercontent.com/Boria138/PortProton_flatpak/main/screenshots/portproton_settings.png
+			</image>
+		</screenshot>
+	</screenshots>
   
   <categories>
     <category>Game</category>
@@ -89,14 +117,5 @@
     <keyword>games</keyword>
     <keyword xml:lang="ru">игры</keyword>
   </keywords>
-
-  <launchable type="desktop-id">com.castrofidel.portproton.desktop</launchable>
-
-  <url type="bugtracker">https://github.com/Castro-Fidel/PortWINE/issues</url>
-  <url type="donation">https://linux-gaming.ru/donate/</url>
-  <url type="homepage">https://linux-gaming.ru</url>
-  <url type="contribute">https://github.com/Castro-Fidel/PortWINE</url>
-
-  <developer_name>Castro-Fidel</developer_name>
 
 </component>
