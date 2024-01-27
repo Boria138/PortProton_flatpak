@@ -44,3 +44,27 @@ To enable MangoHud support install
 ```sh
 flatpak install flathub org.freedesktop.Platform.VulkanLayer.MangoHud
 ```
+
+### Gamescope
+
+To enable Gamescope support install
+
+```sh
+flatpak install org.freedesktop.Platform.VulkanLayer.gamescope
+```
+
+### vkBasalt
+
+To enable vkBasalt support install
+
+```sh
+flatpak install org.freedesktop.Platform.VulkanLayer.vkBasalt
+```
+
+### OBSVkCapture
+
+To enable vkBasalt support install
+
+```sh
+flatpak install org.freedesktop.Platform.VulkanLayer.OBSVkCapture
+```
