@@ -50,12 +50,21 @@ To compile PortProton as a Flatpak, you'll need both [Flatpak](https://flatpak.o
 3. Compile the flatpak
 
    ```sh
-   flatpak-builder --repo=local --force-clean --install-deps-from=flathub build-dir com.castrofidel.portproton.yml
+   flatpak-builder --repo=portproton --force-clean --install-deps-from=flathub build-dir com.castrofidel.portproton.yml
    ```
    
 4. Add the local repo and install the flatpak
 
    ```sh
-   flatpak remote-add local local --no-gpg-verify
-   flatpak install local com.castrofidel.portproton
+   flatpak remote-add --no-gpg-verify --if-not-exists portproton portproton
+   flatpak install portproton com.castrofidel.portproton
    ```
+
+
+### MangoHud
+
+To enable MangoHud support install
+
+```
+flatpak install flathub org.freedesktop.Platform.VulkanLayer.MangoHud
+```

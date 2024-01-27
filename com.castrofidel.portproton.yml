@@ -1,7 +1,7 @@
 app-id: com.castrofidel.portproton
-sdk: org.gnome.Sdk
-runtime: org.gnome.Platform
-runtime-version: "45"
+runtime: org.freedesktop.Platform
+runtime-version: '23.08'
+sdk: org.freedesktop.Sdk
 base: org.winehq.Wine
 base-version: stable-23.08
 command: portproton
@@ -9,7 +9,7 @@ separate-locales: false
 
 finish-args:
   - --share=ipc
-  - --socket=x11
+  - --socket=fallback-x11
   - --socket=wayland
   - --socket=pulseaudio
   # Fixes for Steam Runtime
@@ -37,6 +37,8 @@ finish-args:
   - --filesystem=/run/media
   # Should fix steamdeck controler navigation
   - --filesystem=/run/udev:ro
+  # There are still quite a few users using /mnt/ for external drives
+  - --filesystem=/mnt
   # For Debian
   - --filesystem=/media
   # Permissions to grant access to Steam installation
@@ -53,21 +55,30 @@ finish-args:
   - --talk-name=org.freedesktop.Flatpak
 
 inherit-extensions:
-  - org.freedesktop.Platform.GL32
-  - org.freedesktop.Platform.ffmpeg-full
+  - org.freedesktop.Platform.Compat.i386
   - org.freedesktop.Platform.ffmpeg_full.i386
+  - org.freedesktop.Platform.ffmpeg-full
+  - org.freedesktop.Platform.GL32
+  - org.freedesktop.Platform.VAAPI.Intel.i386
+  - org.winehq.Wine.DLLs
   - org.winehq.Wine.gecko
   - org.winehq.Wine.mono
-  - org.winehq.Wine.DLLs
 
 add-extensions:
-  org.gnome.Platform.Compat.i386:
-    directory: lib/i386-linux-gnu
-    version: '45'
+
+  com.valvesoftware.Steam.Utility:
+    subdirectories: true
+    directory: utils
+    version: stable
+    versions: stable;beta;test
+    add-ld-path: lib
+    merge-dirs: bin
+    no-autodownload: true
+    autodelete: true
 
 sdk-extensions:
-  - org.gnome.Sdk.Compat.i386
-  - org.freedesktop.Sdk.Extension.toolchain-i386
+   - org.freedesktop.Sdk.Compat.i386
+   - org.freedesktop.Sdk.Extension.toolchain-i386
 
 x-compat-i386-opts: &compat_i386_opts
   prepend-pkg-config-path: /app/lib32/pkgconfig:/usr/lib/i386-linux-gnu/pkgconfig
@@ -157,6 +168,17 @@ modules:
     config-opts: *libxmu_config_opts
     sources: *libxmu_sources
 
+  - name: xdpyinfo
+    buildsystem: autotools
+    sources:
+      - type: git
+        url: https://gitlab.freedesktop.org/xorg/app/xdpyinfo.git
+        tag: xdpyinfo-1.3.4
+        commit: ea4083ccb2a5ce4252acabeb2eb7bf49f7be25e0
+        x-checker-data:
+          type: git
+          tag-pattern: ^xdpyinfo-([\d.]+)$
+
   - name: xrdb
     buildsystem: autotools
     sources:
@@ -244,11 +266,12 @@ modules:
         mkdir -p /app/bin
         mkdir -p /app/utils
         mkdir -p /app/lib/i386-linux-gnu
+        mkdir -p /app/lib/debug/lib/i386-linux-gnu
         mkdir -p /app/lib/i386-linux-gnu/GL
+        install -Dm644 ld.so.conf /app/etc/ld.so.conf
         install -Dm644 com.castrofidel.portproton.svg /app/share/icons/hicolor/scalable/apps/com.castrofidel.portproton.svg
         install -Dm644 com.castrofidel.portproton.desktop /app/share/applications/${FLATPAK_ID}.desktop
         install -D portproton -t /app/bin
-        install -Dm644 -t /app/etc ld.so.conf
         install -Dm644 $FLATPAK_ID.metainfo.xml /app/share/metainfo/$FLATPAK_ID.appdata.xml
     sources:
       - type: inline
@@ -326,21 +349,6 @@ modules:
         x-checker-data:
           type: git
           tag-pattern: ^([\d.]+-[\d]+)$
-
-  - name: libportal
-    buildsystem: meson
-    config-opts:
-      - -Ddocs=false
-      - -Dbackend-gtk4=enabled
-    sources:
-      - type: git
-        url: https://github.com/flatpak/libportal
-        tag: 0.7.1
-        commit: e9ed3a50cdde321eaf42361212480a66eb94a57a
-        x-checker-data:
-          type: git
-          is-important: true
-          tag-pattern: ^([\d.]+)$
 
   - name: glu
     config-opts: &glu_config_opts
@@ -430,13 +438,6 @@ modules:
     modules:
       - shared-modules/glew/glew.json
 
-  - name: zenity
-    buildsystem: meson
-    sources:
-      - type: archive
-        url: https://github.com/GNOME/zenity/archive/refs/tags/3.44.1.tar.gz
-        sha256: 90b066983c4106e810a8f50dfb1525e787add1d3b1c96313bd7601f934472aae
-        
   - name: bubblewrap
     buildsystem: meson
     sources:
