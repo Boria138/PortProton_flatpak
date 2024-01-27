@@ -17,7 +17,7 @@
 ## Running
 Launch PortProton from your desktop menu, or via command line:
 
-```
+```sh
 flatpak run com.castrofidel.portproton
 ```
 
@@ -33,38 +33,14 @@ echo "alias portproton='flatpak run com.castrofidel.portproton'" >> ~/.bashrc
 
 To compile PortProton as a Flatpak, you'll need both [Flatpak](https://flatpak.org/setup/) and [Flatpak Builder](http://docs.flatpak.org/en/latest/flatpak-builder.html) installed. Once you manage that, do the following...
 
-0. Clone this repository and `cd` into it
-1. Add the git submodules
-
-   ```sh
-   git submodule init
-   git submodule update
-   ```
-   
-2. Add flathub remote
-
-   ```sh
-   flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
-   ```
-   
-3. Compile the flatpak
-
-   ```sh
-   flatpak-builder --repo=portproton --force-clean --install-deps-from=flathub build-dir com.castrofidel.portproton.yml
-   ```
-   
-4. Add the local repo and install the flatpak
-
-   ```sh
-   flatpak remote-add --no-gpg-verify --if-not-exists portproton portproton
-   flatpak install portproton com.castrofidel.portproton
-   ```
-
+```sh
+./build.sh
+```
 
 ### MangoHud
 
 To enable MangoHud support install
 
-```
+```sh
 flatpak install flathub org.freedesktop.Platform.VulkanLayer.MangoHud
 ```
