@@ -94,6 +94,18 @@ add-extensions:
     directory: share/wine/mono
     bundle: true
 
+  org.freedesktop.Platform.ffmpeg-full:
+    directory: lib/ffmpeg
+    add-ld-path: .
+    version: "23.08"
+    autodelete: false
+
+  org.freedesktop.Platform.ffmpeg_full.i386:
+    directory: lib32/ffmpeg
+    add-ld-path: .
+    version: "23.08"
+    autodelete: false
+
 x-compat-i386-opts: &compat_i386_opts
   prepend-pkg-config-path: /app/lib32/pkgconfig:/usr/lib/i386-linux-gnu/pkgconfig
   ldflags: -L/app/lib32
@@ -275,6 +287,8 @@ modules:
         set -e
         mkdir -p /app/bin
         mkdir -p /app/utils
+        mkdir -p /app/lib/ffmpeg
+        mkdir -p /app/lib32/ffmpeg
         mkdir -p /app/lib/i386-linux-gnu
         mkdir -p /app/lib/debug/lib/i386-linux-gnu
         mkdir -p /app/lib/i386-linux-gnu/GL
