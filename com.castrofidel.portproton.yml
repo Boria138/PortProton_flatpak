@@ -86,6 +86,14 @@ add-extensions:
     version: '45'
     no-autodownload: true
 
+  org.winehq.Wine.gecko:
+    directory: share/wine/gecko
+    bundle: true
+
+  org.winehq.Wine.mono:
+    directory: share/wine/mono
+    bundle: true
+
 x-compat-i386-opts: &compat_i386_opts
   prepend-pkg-config-path: /app/lib32/pkgconfig:/usr/lib/i386-linux-gnu/pkgconfig
   ldflags: -L/app/lib32
