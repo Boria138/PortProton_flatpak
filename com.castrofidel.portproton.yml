@@ -1,37 +1,47 @@
 app-id: com.castrofidel.portproton
-runtime: org.freedesktop.Platform
-runtime-version: '23.08'
-sdk: org.freedesktop.Sdk
-base: org.winehq.Wine
-base-version: stable-23.08
+sdk: org.gnome.Sdk
+runtime: org.gnome.Platform
+runtime-version: "45"
 command: portproton
 separate-locales: false
+
+sdk-extensions:
+   - org.gnome.Sdk.Compat.i386
+   - org.freedesktop.Sdk.Extension.toolchain-i386
 
 finish-args:
   - --share=ipc
   - --socket=x11
   - --socket=wayland
   - --socket=pulseaudio
-  # Fixes for Steam Runtime
+  # Copy some args from Steam Flatpak to make the environment similar
+  # to Proton apps running under Steam Flatpak.
   - --allow=per-app-dev-shm
-  - --env=SSL_CERT_DIR=/etc/ssl/certs
   - --env=XDG_CONFIG_DIRS=/etc/xdg:/usr/lib/x86_64-linux-gnu/GL:/usr/lib/i386-linux-gnu/GL
-  - --env=XDG_DATA_DIRS=/app/share:/usr/lib/extensions/vulkan/share:/usr/share:/usr/share/runtime/share:/run/host/user-share:/run/host/share
+  - --env=LC_ADDRESS=C
+  - --env=LC_COLLATE=C
+  - --env=LC_MONETARY=C
+  - --env=LC_MEASUREMENT=C
+  - --env=LC_NAME=C
+  - --env=LC_NUMERIC=C
+  - --env=LC_TELEPHONE=C
+  - --env=ALSA_CONFIG_PATH=
+  - --unset-env=ALSA_CONFIG_PATH
+  - --env=MESA_GLSL_CACHE_DIR=
+  - --unset-env=MESA_GLSL_CACHE_DIR
   - --device=all
   - --share=network
   - --allow=multiarch
+  - --allow=bluetooth
   # For Wine crash handling
   - --allow=devel
   # Need to link .desktop files
   - --filesystem=~/.local/share/applications:create
   # Wine uses UDisks2 to enumerate disk drives
   - --system-talk-name=org.freedesktop.UDisks2
-  - --talk-name=org.gnome.Mutter.DisplayConfig
   - --system-talk-name=org.freedesktop.NetworkManager
   # For mangohud config
   - --filesystem=xdg-config/MangoHud:ro
-  # For Steam Deck HDR support
-  - --env=LD_LIBRARY_PATH=/usr/lib/extensions/vulkan/gamescope/lib
   - --filesystem=xdg-run/gamescope-0:ro
   # Should fix access to SD card on the deck
   - --filesystem=/run/media
@@ -41,44 +51,40 @@ finish-args:
   - --filesystem=/mnt
   # For Debian
   - --filesystem=/media
-  # Permissions to grant access to Steam installation
-  - --filesystem=~/.var/app/com.valvesoftware.Steam
-  - --filesystem=~/.local/share/Steam
-  - --filesystem=~/.steam
-  - --filesystem=home
+  - --filesystem=host:rw
+  - --filesystem=xdg-run/pipewire-0
   # ENV
   - --env=PATH=/app/bin:/usr/bin:/app/utils/bin:/usr/lib/extensions/vulkan/MangoHud/bin/:/usr/lib/extensions/vulkan/gamescope/bin:/usr/lib/extensions/vulkan/OBSVkCapture/bin
+  - --env=LD_LIBRARY_PATH=/app/lib:/app/lib32:/usr/lib/extensions/vulkan/gamescope/lib
   # See: https://github.com/flathub/net.lutris.Lutris/pull/368#issuecomment-1751381312
   - --env=WEBKIT_DISABLE_DMABUF_RENDERER=1
+  - --env=GST_PLUGIN_SYSTEM_PATH=/app/lib/gstreamer-1.0:/usr/lib/x86_64-linux-gnu/gstreamer-1.0:/app/lib32/gstreamer-1.0:/usr/lib/i386-linux-gnu/gstreamer-1.0
   # System tray icon
   - --talk-name=org.kde.StatusNotifierWatcher
   - --talk-name=org.freedesktop.Flatpak
 
-inherit-extensions:
-  - org.freedesktop.Platform.Compat.i386
-  - org.freedesktop.Platform.ffmpeg_full.i386
-  - org.freedesktop.Platform.ffmpeg-full
-  - org.freedesktop.Platform.GL32
-  - org.freedesktop.Platform.VAAPI.Intel.i386
-  - org.winehq.Wine.DLLs
-  - org.winehq.Wine.gecko
-  - org.winehq.Wine.mono
-
 add-extensions:
 
-  com.valvesoftware.Steam.Utility:
+  org.freedesktop.Platform.GL32:
+    directory: lib/i386-linux-gnu/GL
+    version: '1.4'
+    versions: 23.08;23.08-extra;1.4
     subdirectories: true
-    directory: utils
-    version: stable
-    versions: stable;beta;test
-    add-ld-path: lib
-    merge-dirs: bin
     no-autodownload: true
-    autodelete: true
+    autodelete: false
+    add-ld-path: lib
+    merge-dirs: vulkan/icd.d;glvnd/egl_vendor.d;OpenCL/vendors;lib/dri;lib/d3d;vulkan/explicit_layer.d
+    download-if: active-gl-driver
+    enable-if: active-gl-driver
 
-sdk-extensions:
-   - org.freedesktop.Sdk.Compat.i386
-   - org.freedesktop.Sdk.Extension.toolchain-i386
+  org.gnome.Platform.Compat.i386:
+    directory: lib/i386-linux-gnu
+    version: '45'
+
+  org.gnome.Platform.Compat.i386.Debug:
+    directory: lib/debug/lib/i386-linux-gnu
+    version: '45'
+    no-autodownload: true
 
 x-compat-i386-opts: &compat_i386_opts
   prepend-pkg-config-path: /app/lib32/pkgconfig:/usr/lib/i386-linux-gnu/pkgconfig
@@ -102,18 +108,14 @@ cleanup:
     
 modules:
 
-  - name: intltool
-    cleanup:
-      - '*'
+  - name: zenity
+    buildsystem: meson
     sources:
       - type: archive
-        url: https://launchpad.net/intltool/trunk/0.51.0/+download/intltool-0.51.0.tar.gz
-        sha256: 67c74d94196b153b774ab9f89b2fa6c6ba79352407037c8c14d5aeb334e959cd
-    x-checker-data:
-      type: anitya
-      project-id: 1385
-      stable-only: true
-      url-template: https://launchpad.net/intltool/trunk/$version/+download/intltool-$version.tar.gz
+        url: https://download.gnome.org/sources/zenity/3.41/zenity-3.41.0.tar.xz
+        sha256: 19b676c3510e22badfcc3204062d432ba537402f5e0ae26128c0d90c954037e1
+
+  - shared-modules/libappindicator/libappindicator-gtk3-introspection-12.10.json
 
   - name: yad
     config-opts:
@@ -268,11 +270,11 @@ modules:
         mkdir -p /app/lib/i386-linux-gnu
         mkdir -p /app/lib/debug/lib/i386-linux-gnu
         mkdir -p /app/lib/i386-linux-gnu/GL
-        install -Dm644 ld.so.conf /app/etc/ld.so.conf
-        install -Dm644 com.castrofidel.portproton.svg /app/share/icons/hicolor/scalable/apps/com.castrofidel.portproton.svg
-        install -Dm644 com.castrofidel.portproton.desktop /app/share/applications/${FLATPAK_ID}.desktop
+        install -Dm644 $FLATPAK_ID.svg /app/share/icons/hicolor/scalable/apps/${FLATPAK_ID}.svg
+        install -Dm644 $FLATPAK_ID.desktop /app/share/applications/${FLATPAK_ID}.desktop
         install -D portproton -t /app/bin
-        install -Dm644 $FLATPAK_ID.metainfo.xml /app/share/metainfo/$FLATPAK_ID.appdata.xml
+        install -Dm644 $FLATPAK_ID.metainfo.xml /app/share/metainfo/${FLATPAK_ID}.appdata.xml
+        install -Dm644 ld.so.conf /app/etc/ld.so.conf
     sources:
       - type: inline
         dest-filename: ld.so.conf
@@ -350,26 +352,6 @@ modules:
           type: git
           tag-pattern: ^([\d.]+-[\d]+)$
 
-  - name: glu
-    config-opts: &glu_config_opts
-      - --disable-static
-    sources: &glu_sources
-      - type: archive
-        url: https://mesa.freedesktop.org/archive/glu/glu-9.0.2.tar.xz
-        sha256: 6e7280ff585c6a1d9dfcdf2fca489251634b3377bfc33c29e4002466a38d02d4
-        x-checker-data:
-          type: anitya
-          project-id: 13518
-          stable-only: true
-          url-template: https://mesa.freedesktop.org/archive/glu/glu-$version.tar.xz
-
-  - name: glu-32bit
-    build-options:
-      arch:
-        x86_64: *compat_i386_opts
-    config-opts: *glu_config_opts
-    sources: *glu_sources
-
   - name: hwdata
     config-opts:
       - --datarootdir=/app/share
@@ -418,29 +400,44 @@ modules:
         url: https://xorg.freedesktop.org/archive/individual/app/setxkbmap-1.3.3.tar.xz
         sha256: b560c678da6930a0da267304fa3a41cc5df39a96a5e23d06f14984c87b6f587b
 
-  - name: mesa-demos
-    config-opts:
-      - --without-glut
-      - --bindir=/app/lib/mesa-demos
-    make-args:
-      - -C
-      - src/xdemos
-      - glxinfo
-    no-make-install: true
-    build-commands:
-      - install -D src/xdemos/glxinfo -t /app/bin/
-    sources:
-      - type: archive
-        url: https://mesa.freedesktop.org/archive/demos/mesa-demos-8.4.0.tar.bz2
-        sha256: 01e99c94a0184e63e796728af89bfac559795fb2a0d6f506fa900455ca5fff7d
-    cleanup:
-      - /lib/mesa-demos
-    modules:
-      - shared-modules/glew/glew.json
-
-  - name: bubblewrap
+  - name: glxinfo
     buildsystem: meson
+    config-opts:
+      - --bindir=/app/mesa-demos
+      - -Degl=disabled
+      - -Dglut=disabled
+      - -Dosmesa=disabled
+      - -Dvulkan=disabled
+      - -Dwayland=disabled
+    post-install:
+      - mv -v /app/mesa-demos/glxinfo /app/bin
     sources:
       - type: archive
-        url: https://github.com/containers/bubblewrap/releases/download/v0.8.0/bubblewrap-0.8.0.tar.xz
-        sha256: 957ad1149db9033db88e988b12bcebe349a445e1efc8a9b59ad2939a113d333a
+        url: https://archive.mesa3d.org/demos/mesa-demos-9.0.0.tar.xz
+        sha256: 3046a3d26a7b051af7ebdd257a5f23bfeb160cad6ed952329cdff1e9f1ed496b
+        x-checker-data:
+          type: anitya
+          project-id: 16781
+          stable-only: true
+          url-template: https://archive.mesa3d.org/demos/mesa-demos-$version.tar.xz
+    cleanup:
+      - /include
+      - /mesa-demos
+      - /share
+    modules:
+      - shared-modules/glu/glu-9.json
+
+  - name: libportal
+    buildsystem: meson
+    config-opts:
+      - -Ddocs=false
+      - -Dbackend-gtk4=enabled
+    sources:
+      - type: git
+        url: https://github.com/flatpak/libportal
+        tag: 0.7.1
+        commit: e9ed3a50cdde321eaf42361212480a66eb94a57a
+        x-checker-data:
+          type: git
+          is-important: true
+          tag-pattern: ^([\d.]+)$
