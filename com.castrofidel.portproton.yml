@@ -53,6 +53,10 @@ finish-args:
   - --filesystem=/media
   - --filesystem=host:rw
   - --filesystem=xdg-run/pipewire-0
+  # For theme
+  - --filesystem=xdg-data/flatpak/overrides:create
+  - --filesystem=xdg-config/gtk-3.0
+  - --filesystem=xdg-config/gtk-4.0
   # ENV
   - --env=PATH=/app/bin:/usr/bin:/app/utils/bin:/usr/lib/extensions/vulkan/MangoHud/bin/:/usr/lib/extensions/vulkan/gamescope/bin:/usr/lib/extensions/vulkan/OBSVkCapture/bin
   - --env=LD_LIBRARY_PATH=/app/lib:/app/lib32:/usr/lib/extensions/vulkan/gamescope/lib
