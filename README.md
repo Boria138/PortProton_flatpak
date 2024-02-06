@@ -4,9 +4,9 @@
   <p align="center">A project designed to make it easy and convenient to run Windows games on Linux for both beginners and advanced users. The project strives to make running games (and other software) as easy as possible, but at the same time provides flexible settings for advanced users</p>
 </div>
 
-## ⚠️ Attention
-### The project is under development
-#### The flathub package installation section is here for demonstration purposes only at the moment it is only possible to build the package via flatpak builder
+> [!WARNING]
+> The project is under development
+> The flathub package installation section is here for demonstration purposes only at the moment it is only possible to build the package via flatpak builder
 
 ## 💻 Installation
 
@@ -63,7 +63,7 @@ flatpak install org.freedesktop.Platform.VulkanLayer.vkBasalt
 
 ### OBSVkCapture
 
-To enable vkBasalt support install
+To enable OBSVkCapture support install
 
 ```sh
 flatpak install org.freedesktop.Platform.VulkanLayer.OBSVkCapture
