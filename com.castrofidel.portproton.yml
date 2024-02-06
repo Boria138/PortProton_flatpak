@@ -25,10 +25,6 @@ finish-args:
   - --env=LC_NAME=C
   - --env=LC_NUMERIC=C
   - --env=LC_TELEPHONE=C
-  - --env=ALSA_CONFIG_PATH=
-  - --unset-env=ALSA_CONFIG_PATH
-  - --env=MESA_GLSL_CACHE_DIR=
-  - --unset-env=MESA_GLSL_CACHE_DIR
   - --device=all
   - --share=network
   - --allow=multiarch
@@ -296,11 +292,11 @@ modules:
         mkdir -p /app/lib/i386-linux-gnu
         mkdir -p /app/lib/debug/lib/i386-linux-gnu
         mkdir -p /app/lib/i386-linux-gnu/GL
-        install -Dm644 $FLATPAK_ID.svg /app/share/icons/hicolor/scalable/apps/${FLATPAK_ID}.svg
-        install -Dm644 $FLATPAK_ID.desktop /app/share/applications/${FLATPAK_ID}.desktop
+        install -Dm644 com.castrofidel.portproton.svg /app/share/icons/hicolor/scalable/apps/com.castrofidel.portproton.svg
+        install -Dm644 com.castrofidel.portproton.desktop /app/share/applications/com.castrofidel.portproton.desktop
         install -D portproton -t /app/bin
-        install -Dm644 $FLATPAK_ID.metainfo.xml /app/share/metainfo/${FLATPAK_ID}.appdata.xml
-        install -Dm644 ld.so.conf /app/etc/ld.so.conf
+        install -Dm644 -t /app/etc ld.so.conf
+        install -Dm644 com.castrofidel.portproton.metainfo.xml /app/share/metainfo/com.castrofidel.portproton.appdata.xml
     sources:
       - type: inline
         dest-filename: ld.so.conf
