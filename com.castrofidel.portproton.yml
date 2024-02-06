@@ -65,7 +65,6 @@ finish-args:
   - --env=GST_PLUGIN_SYSTEM_PATH=/app/lib/gstreamer-1.0:/usr/lib/x86_64-linux-gnu/gstreamer-1.0:/app/lib32/gstreamer-1.0:/usr/lib/i386-linux-gnu/gstreamer-1.0
   # System tray icon
   - --talk-name=org.kde.StatusNotifierWatcher
-  # For pgrep work
   - --talk-name=org.freedesktop.Flatpak
 
 add-extensions:
@@ -297,12 +296,6 @@ modules:
         mkdir -p /app/lib/i386-linux-gnu
         mkdir -p /app/lib/debug/lib/i386-linux-gnu
         mkdir -p /app/lib/i386-linux-gnu/GL
-        mkdir -p /app/share/vulkan
-        mkdir -p /app/links/lib
-        ln -srv /app/{utils/,}share/vulkan/explicit_layer.d
-        ln -srv /app/{utils/,}share/vulkan/implicit_layer.d
-        ln -srv /app/lib /app/links/lib/x86_64-linux-gnu
-        ln -srv /app/lib32 /app/links/lib/i386-linux-gnu
         install -Dm644 $FLATPAK_ID.svg /app/share/icons/hicolor/scalable/apps/${FLATPAK_ID}.svg
         install -Dm644 $FLATPAK_ID.desktop /app/share/applications/${FLATPAK_ID}.desktop
         install -D portproton -t /app/bin
