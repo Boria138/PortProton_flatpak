@@ -6,10 +6,11 @@
   <summary>Software for playing Microsoft Windows games and launchers</summary>
   <summary xml:lang="ru">Программа для запуска игр и лаунчеров с Microsoft Windows</summary>
 
-<!--  TODO: Developer  -->
-<!--  <developer id="https://linux-gaming.ru">
-        <name>Mikhail Tergoev</name>
-  </developer>-->
+  <!-- developer_name tag deprecated with Appstream 1.0 -->
+  <developer_name translatable="no">Mikhail Tergoev</developer_name>
+  <developer id="linux-gaming.ru">
+    <name translatable="no">Mikhail Tergoev</name>
+  </developer>
 
   <url type="homepage">https://linux-gaming.ru</url>
   <url type="bugtracker">https://github.com/Castro-Fidel/PortWINE/issues</url>

@@ -128,13 +128,6 @@ cleanup:
     
 modules:
 
-  - name: zenity
-    buildsystem: meson
-    sources:
-      - type: archive
-        url: https://download.gnome.org/sources/zenity/3.41/zenity-3.41.0.tar.xz
-        sha256: 19b676c3510e22badfcc3204062d432ba537402f5e0ae26128c0d90c954037e1
-
   - shared-modules/libappindicator/libappindicator-gtk3-introspection-12.10.json
 
   - name: yad
@@ -358,21 +351,6 @@ modules:
         x-checker-data:
           type: git
           tag-pattern: ^sdk-([\d.]+)$
-
-  - name: ImageMagick
-    config-opts:
-      - --disable-static
-      - --disable-docs
-      - --with-hdri
-      - --with-pic
-    sources:
-      - type: git
-        url: https://github.com/ImageMagick/ImageMagick
-        tag: 7.1.1-23
-        commit: 54b13e91d262b1083e27fc8c02532c89d3ff649c
-        x-checker-data:
-          type: git
-          tag-pattern: ^([\d.]+-[\d]+)$
 
   - name: hwdata
     config-opts:
