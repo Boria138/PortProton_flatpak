@@ -15,22 +15,15 @@ fatal () {
 }
 
 ########################################################################
-if [ "$(id -u)" == "0" ] ; then
-	$yad_gui --error --text "\nDo not run ${portname} from the superuser!" 2>/dev/null
-	fatal "Do not run the script from the superuser!"
-fi
-########################################################################
 unset PW_USE_NS
 yad_gui="yad --window-icon=portproton.svg --borders=10 --center --text-align=center"
 
-if [ "$script_path" == "/app/bin" ] && [ -f "${PP_CONFIG_FILE}" ] ; then
+if [ "$script_path" == "/app/bin" ] ; then
 	export PORT_WINE_PATH="${XDG_DATA_HOME}"
 	if [ -f "${PORT_WINE_PATH}/scripts/start.sh" ] ; then
 		echo "${port_ver}" > "${PORT_WINE_PATH}/tmp/${portname}_ver"
 		/usr/bin/env bash "${PORT_WINE_PATH}/scripts/start.sh" "$@"
 		exit 0
-	else
-		rm -f "${PP_CONFIG_FILE}"
 	fi
 fi
 if locale | grep "LANG=ru_RU.UTF-8" 2>/dev/null
