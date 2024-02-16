@@ -34,8 +34,15 @@ echo "alias portproton='flatpak run com.castrofidel.portproton'" >> ~/.bashrc
 To compile PortProton as a Flatpak, you'll need both [Flatpak](https://flatpak.org/setup/) and [Flatpak Builder](http://docs.flatpak.org/en/latest/flatpak-builder.html) installed. Once you manage that, do the following...
 
 ```sh
+
+flatpak remote-add --if-not-exists flathub https://dl.flathub.org/repo/flathub.flatpakrepo
+
+flatpak install flathub org.gnome.Platform.Compat.i386 org.freedesktop.Platform.GL32.default org.winehq.Wine.mono org.winehq.Wine.gecko org.freedesktop.Platform.ffmpeg-full org.freedesktop.Platform.ffmpeg_full.i386
+
 ./build.sh
 ```
+
+**If you used nvidia install org.freedesktop.Platform.GL32.nvidia**
 
 ### MangoHud
 

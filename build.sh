@@ -1,10 +1,5 @@
 git submodule init
 git submodule update
-flatpak remote-add --if-not-exists flathub https://dl.flathub.org/repo/flathub.flatpakrepo
-flatpak install flathub org.gnome.Platform.Compat.i386//45 org.freedesktop.Platform.GL32.default//23.08 org.freedesktop.Platform.GL32.default//23.08-extra org.winehq.Wine.mono//stable-23.08 org.winehq.Wine.gecko//stable-23.08 org.freedesktop.Platform.ffmpeg-full//23.08 org.freedesktop.Platform.ffmpeg_full.i386//23.08  -y
-if [[ -d /sys/module/nvidia ]]
-then flatpak install flathub org.freedesktop.Platform.GL32.nvidia-545-29-06//1.4 -y
-fi
 flatpak-builder --repo=local --force-clean --install-deps-from=flathub build-dir com.castrofidel.portproton.yml
 sudo flatpak remote-add --no-gpg-verify --if-not-exists local local
 flatpak install local com.castrofidel.portproton -y
