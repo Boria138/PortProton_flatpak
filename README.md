@@ -10,10 +10,21 @@
 
 ## 💻 Installation
 
+### From FlatHub
+
    ```sh
    flatpak install flathub com.castrofidel.portproton
    ```
    
+### From Bundle
+
+```sh
+flatpak install portproton.flatpak
+flatpak install org.freedesktop.Platform.GL32.default org.winehq.Wine.gecko org.winehq.Wine.mono org.gnome.Platform.Compat.i386 org.freedesktop.Platform.ffmpeg-full org.freedesktop.Platform.ffmpeg_full.i386
+```
+
+If you used nvidia install **org.freedesktop.Platform.GL32.nvidia**
+
 ## Running
 Launch PortProton from your desktop menu, or via command line:
 
@@ -42,7 +53,7 @@ flatpak install flathub org.gnome.Platform.Compat.i386 org.freedesktop.Platform.
 ./build.sh
 ```
 
-**If you used nvidia install org.freedesktop.Platform.GL32.nvidia**
+If you used nvidia install **org.freedesktop.Platform.GL32.nvidia**
 
 ### MangoHud
 
@@ -74,4 +85,13 @@ To enable OBSVkCapture support install
 
 ```sh
 flatpak install org.freedesktop.Platform.VulkanLayer.OBSVkCapture
+```
+
+
+### Wine
+
+To use system wine install
+
+```sh
+flatpak install org.winehq.Wine
 ```

@@ -43,25 +43,6 @@ pw_notify_send () {
 	fi
 }
 ########################################################################
-unset PW_USE_NS
-YAD_PORTABLE_VER="12_3"
-if command -v yad &>/dev/null ; then
-	yad_gui="yad --window-icon=portproton.svg --borders=10 --center --text-align=center"
-elif curl -f -# -A "Mozilla/5.0 (compatible; Konqueror/2.1.1; X11)" \
-	-H 'Cache-Control: no-cache, no-store' -H 'Pragma: no-cache' \
-	-L "https://github.com/Castro-Fidel/PortWINE/releases/download/yad_portable_v${YAD_PORTABLE_VER}/yad_portable_v${YAD_PORTABLE_VER}.tar.xz" \
-	-o "${HOME}/yad_portable_v${YAD_PORTABLE_VER}.tar.xz"
-then
-	mkdir -p "${HOME}/.local/bin/" &>/dev/null
-	tar -Jxhvf "${HOME}/yad_portable_v${YAD_PORTABLE_VER}.tar.xz" -C "${HOME}/.local/bin/"
-	if [[ -f "${HOME}/.local/bin/yad_portable_v${YAD_PORTABLE_VER}" ]]
-	then yad_gui="${HOME}/.local/bin/yad_portable_v${YAD_PORTABLE_VER} --borders=10 --center --text-align=center"
-	else PW_USE_NS=1
-	fi
-else
-	PW_USE_NS=1
-fi
-########################################################################
 export PW_SILENT_INSTALL=1
 export PW_AUTOPLAY=1
 export INSTALLING_PORT=1
@@ -108,8 +89,8 @@ fi
 echo "Try unpacking scripts..."
 tar -xvzf "${PORT_WINE_TMP_PATH}/PortWINE-master.tar.gz" -C "${PORT_WINE_TMP_PATH}"
 if [ "$?" = "0" ] ; then
-	[ ! -d "${PORT_WINE_PATH}/data/" ] && mkdir "${PORT_WINE_PATH}/data/"
-	cp -fr "${PORT_WINE_TMP_PATH}/PortWINE-master/data_from_portwine/"* "${PORT_WINE_PATH}/data/"
+	[ ! -d "${PORT_WINE_PATH}" ] && mkdir "${PORT_WINE_PATH}"
+	cp -fr "${PORT_WINE_TMP_PATH}/PortWINE-master/data_from_portwine/"* "${PORT_WINE_PATH}"
 	rm -f "${PORT_WINE_TMP_PATH}/PortWINE-master.tar.gz"
 	rm -fr "${PORT_WINE_TMP_PATH}/PortWINE-master/"
 	export scripts_current_ver=$(cat "${PORT_WINE_PATH}/scripts/var" | grep SCRIPTS_NEXT_VERSION | awk -F "=" '{print $2}')

@@ -1,13 +1,11 @@
 app-id: com.castrofidel.portproton
 sdk: org.gnome.Sdk
 runtime: org.gnome.Platform
-runtime-version: "45"
+runtime-version: '45'
+base: org.winehq.Wine
+base-version: stable-23.08
 command: portproton
 separate-locales: false
-
-sdk-extensions:
-   - org.gnome.Sdk.Compat.i386
-   - org.freedesktop.Sdk.Extension.toolchain-i386
 
 finish-args:
   - --share=ipc
@@ -37,7 +35,6 @@ finish-args:
   - --system-talk-name=org.freedesktop.UDisks2
   - --system-talk-name=org.freedesktop.NetworkManager
   # For mangohud config
-  - --filesystem=xdg-config/MangoHud:ro
   - --filesystem=xdg-run/gamescope-0:ro
   # Should fix access to SD card on the deck
   - --filesystem=/run/media
@@ -48,11 +45,6 @@ finish-args:
   # For Debian
   - --filesystem=/media
   - --filesystem=host:rw
-  - --filesystem=xdg-run/pipewire-0
-  # For theme
-  - --filesystem=xdg-data/flatpak/overrides:create
-  - --filesystem=xdg-config/gtk-3.0
-  - --filesystem=xdg-config/gtk-4.0
   # ENV
   - --env=PATH=/app/bin:/usr/bin:/app/utils/bin:/usr/lib/extensions/vulkan/MangoHud/bin/:/usr/lib/extensions/vulkan/gamescope/bin:/usr/lib/extensions/vulkan/OBSVkCapture/bin
   - --env=LD_LIBRARY_PATH=/app/lib:/app/lib32:/usr/lib/extensions/vulkan/gamescope/lib
@@ -61,50 +53,16 @@ finish-args:
   - --env=GST_PLUGIN_SYSTEM_PATH=/app/lib/gstreamer-1.0:/usr/lib/x86_64-linux-gnu/gstreamer-1.0:/app/lib32/gstreamer-1.0:/usr/lib/i386-linux-gnu/gstreamer-1.0
   # System tray icon
   - --talk-name=org.kde.StatusNotifierWatcher
-  - --talk-name=org.freedesktop.Flatpak
+
+inherit-extensions:
+  - org.freedesktop.Platform.GL32
+  - org.freedesktop.Platform.ffmpeg-full
+  - org.freedesktop.Platform.ffmpeg_full.i386
+  - org.winehq.Wine.gecko
+  - org.winehq.Wine.mono
+  - org.winehq.Wine.DLLs
 
 add-extensions:
-
-  org.freedesktop.Platform.GL32:
-    directory: lib/i386-linux-gnu/GL
-    version: '1.4'
-    versions: 23.08;23.08-extra;1.4
-    subdirectories: true
-    no-autodownload: true
-    autodelete: false
-    add-ld-path: lib
-    merge-dirs: vulkan/icd.d;glvnd/egl_vendor.d;OpenCL/vendors;lib/dri;lib/d3d;vulkan/explicit_layer.d
-    download-if: active-gl-driver
-    enable-if: active-gl-driver
-
-  org.gnome.Platform.Compat.i386:
-    directory: lib/i386-linux-gnu
-    version: '45'
-
-  org.gnome.Platform.Compat.i386.Debug:
-    directory: lib/debug/lib/i386-linux-gnu
-    version: '45'
-    no-autodownload: true
-
-  org.winehq.Wine.gecko:
-    directory: share/wine/gecko
-    bundle: true
-
-  org.winehq.Wine.mono:
-    directory: share/wine/mono
-    bundle: true
-
-  org.freedesktop.Platform.ffmpeg-full:
-    directory: lib/ffmpeg
-    add-ld-path: .
-    version: "23.08"
-    autodelete: false
-
-  org.freedesktop.Platform.ffmpeg_full.i386:
-    directory: lib32/ffmpeg
-    add-ld-path: .
-    version: "23.08"
-    autodelete: false
 
 x-compat-i386-opts: &compat_i386_opts
   prepend-pkg-config-path: /app/lib32/pkgconfig:/usr/lib/i386-linux-gnu/pkgconfig
@@ -114,6 +72,10 @@ x-compat-i386-opts: &compat_i386_opts
     CC: i686-unknown-linux-gnu-gcc
     CXX: i686-unknown-linux-gnu-g++
   libdir: /app/lib32
+
+sdk-extensions:
+  - org.gnome.Sdk.Compat.i386
+  - org.freedesktop.Sdk.Extension.toolchain-i386
 
 cleanup:
   - /include
@@ -125,6 +87,7 @@ cleanup:
   - /share/pkgconfig
   - "*.la"
   - "*.a"
+  - "*.pod"
     
 modules:
 
@@ -352,30 +315,67 @@ modules:
           type: git
           tag-pattern: ^sdk-([\d.]+)$
 
+  - name: ImageMagick
+    config-opts:
+      - --disable-static
+      - --disable-docs
+      - --with-hdri
+      - --with-pic
+    sources:
+      - type: git
+        url: https://github.com/ImageMagick/ImageMagick
+        tag: 7.1.1-23
+        commit: 54b13e91d262b1083e27fc8c02532c89d3ff649c
+        x-checker-data:
+          type: git
+          tag-pattern: ^([\d.]+-[\d]+)$
+
   - name: hwdata
     config-opts:
       - --datarootdir=/app/share
     sources:
       - type: git
         url: https://github.com/vcrhonek/hwdata
-        tag: v0.378
-        commit: 5580883256f77cfba526ebd81caa504e61047d87
+        tag: v0.380
+        commit: d0cbfddb1fec4bb1a395373396c972e5f210bcf8
         x-checker-data:
           type: json
           url: https://api.github.com/repos/vcrhonek/hwdata/releases/latest
           tag-query: .tag_name
 
-  - name: perl
+  # Taken from https://github.com/flathub/fr.romainvigier.MetadataCleaner/blob/74c261effe8536e33c2669b75acb340ecfff3142/fr.romainvigier.MetadataCleaner.yaml#L73
+  - name: exiftool
+    buildsystem: simple
+    build-commands:
+      - perl Makefile.PL
+      - make install
     sources:
-      - type: archive
-        url: https://www.cpan.org/src/5.0/perl-5.34.0.tar.gz
-        sha256: 551efc818b968b05216024fb0b727ef2ad4c100f8cb6b43fab615fa78ae5be9a
-      - type: script
-        dest-filename: configure
-        commands:
-          - ./Configure -des -Dprefix=/app
-    post-install:
-      - find /app/lib/perl5 -type f -exec chmod u+w {} \;
+      - type: git
+        url: https://github.com/exiftool/exiftool.git
+        tag: '12.76'
+        commit: 212f02cf22b9484674752181cad3b73089ce9694
+        x-checker-data:
+          type: git
+          tag-pattern: ^(\d+\.\d+[02468])$
+    modules:
+      - name: perl
+        buildsystem: simple
+        build-commands:
+          - ./Configure -des -Dprefix=$FLATPAK_DEST -Dman1dir=none -Dman3dir=none
+          - make
+          - make install
+        post-install:
+          # Fix wrong permissions
+          - find $FLATPAK_DEST/lib/perl5 -type f -exec chmod u+w {} \;
+        sources:
+          - type: git
+            url: https://github.com/Perl/perl5.git
+            tag: v5.38.2
+            commit: 55dd2f792ffc8cefe614350a411f785374281b24
+            disable-fsckobjects: true
+            x-checker-data:
+              type: git
+              tag-pattern: ^v(\d+\.\d+[02468].\d+)$
 
   - name: inxi
     buildsystem: simple
@@ -385,8 +385,8 @@ modules:
         install -Dm0775 -t /app/bin inxi
     sources:
       - type: archive
-        url: https://github.com/smxi/inxi/archive/3.3.27-1.tar.gz
-        sha256: 35207195579261ddfe59508fdc92d40902c91230084d2b98b4541a6f4c682f63
+        url: https://github.com/smxi/inxi/archive/3.3.31-2.tar.gz
+        sha256: ff5d138392ac557e31ede6cf96d73d1b9f972f42f6529d47fec2c51184bff338
 
   - name: xrandr
     sources:
@@ -426,18 +426,3 @@ modules:
       - /share
     modules:
       - shared-modules/glu/glu-9.json
-
-  - name: libportal
-    buildsystem: meson
-    config-opts:
-      - -Ddocs=false
-      - -Dbackend-gtk4=enabled
-    sources:
-      - type: git
-        url: https://github.com/flatpak/libportal
-        tag: 0.7.1
-        commit: e9ed3a50cdde321eaf42361212480a66eb94a57a
-        x-checker-data:
-          type: git
-          is-important: true
-          tag-pattern: ^([\d.]+)$

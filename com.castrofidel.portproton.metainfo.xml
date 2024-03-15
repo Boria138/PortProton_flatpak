@@ -6,13 +6,9 @@
   <summary>Software for playing Microsoft Windows games and launchers</summary>
   <summary xml:lang="ru">Программа для запуска игр и лаунчеров с Microsoft Windows</summary>
 
-  <!-- developer_name tag deprecated with Appstream 1.0 -->
-  <developer_name translatable="no">Mikhail Tergoev</developer_name>
-  <developer id="linux-gaming.ru">
-    <name translatable="no">Mikhail Tergoev</name>
-  </developer>
+  <developer_name>Castro-Fidel</developer_name>
 
-  <url type="homepage">https://linux-gaming.ru</url>
+  <url type="homepage">https://github.com/Castro-Fidel/PortWINE</url>
   <url type="bugtracker">https://github.com/Castro-Fidel/PortWINE/issues</url>
   <url type="donation">https://linux-gaming.ru/2022/09/11/donate/</url>
   <url type="vcs-browser">https://github.com/Castro-Fidel/PortWINE</url>
