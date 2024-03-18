@@ -19,19 +19,19 @@ jobs:
       run: |
         pacman --noconfirm -Suy
         pacman --noconfirm -S flatpak flatpak-builder xorg-server-xvfb git-lfs python-aiohttp python-tenacity ccache zstd appstream-glib python-gobject dbus-broker-units wget
-        flatpak install -y --noninteractive flathub org.freedesktop.Platform//23.08 org.freedesktop.Sdk//23.08
+        flatpak install -y --noninteractive flathub org.gnome.Platform//45 org.gnome.Sdk//45
         flatpak install flathub org.flatpak.Builder -y
         wget https://raw.githubusercontent.com/flatpak/flat-manager/b07fe8652357ce16d9625f72f9acceaca94d860a/flat-manager-client -P /usr/bin/
         chmod +x /usr/bin/flat-manager-client
 
-      - name: Checkout
-        uses: actions/checkout@v4
-        with:
-          submodules: recursive
+    - name: Checkout
+      uses: actions/checkout@v4
+      with:
+        submodules: recursive
 
-      - name: Build
-        uses: flatpak/flatpak-github-actions/flatpak-builder@v6
-        with:
-          bundle: portproton.flatpak
-          manifest-path: com.castrofidel.portproton.yml
-          cache-key: flatpak-builder-${{ github.sha }}
+    - name: Build
+      uses: flatpak/flatpak-github-actions/flatpak-builder@v6
+      with:
+        bundle: portproton.flatpak
+        manifest-path: com.castrofidel.portproton.yml
+        cache-key: flatpak-builder-${{ github.sha }}
