@@ -393,6 +393,7 @@ modules:
       - /mesa-demos
       - /share
     modules:
+      - shared-modules/glu/glu-9.json
 
 
   - name: platform-bootstrap
