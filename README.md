@@ -1,5 +1,5 @@
 <div align="center">
-  <img src="com.castrofidel.portproton.svg" width="64">
+  <img src="ru.linux_gaming.PortProton.svg" width="64">
   <h1 align="center"><a href="https://github.com/Castro-Fidel/">Castro-Fidel</a> PortProton's on Flatpak</h1>
   <p align="center">A project designed to make it easy and convenient to run Windows games on Linux for both beginners and advanced users. The project strives to make running games (and other software) as easy as possible, but at the same time provides flexible settings for advanced users</p>
 </div>
@@ -13,14 +13,14 @@
 ### From FlatHub
 
    ```sh
-   flatpak install flathub com.castrofidel.portproton
+   flatpak install flathub ru.linux_gaming.PortProton
    ```
    
 ### From Bundle
 
 ```sh
 flatpak install portproton.flatpak
-flatpak install org.freedesktop.Platform.GL32.default org.winehq.Wine.gecko org.winehq.Wine.mono org.gnome.Platform.Compat.i386 org.freedesktop.Platform.ffmpeg-full org.freedesktop.Platform.ffmpeg_full.i386
+flatpak install org.freedesktop.Platform.GL32.default org.freedesktop.Platform.Compat.i386 org.freedesktop.Platform.ffmpeg-full org.freedesktop.Platform.ffmpeg_full.i386 org.winehq.Wine.gecko org.winehq.Wine.mono
 ```
 
 If you used nvidia install **org.freedesktop.Platform.GL32.nvidia**
@@ -29,13 +29,13 @@ If you used nvidia install **org.freedesktop.Platform.GL32.nvidia**
 Launch PortProton from your desktop menu, or via command line:
 
 ```sh
-flatpak run com.castrofidel.portproton
+flatpak run ru.linux_gaming.PortProton
 ```
 
 Or add an alias that allows you to call PortProton using the `portproton` alias:
 
 ```sh
-echo "alias portproton='flatpak run com.castrofidel.portproton'" >> ~/.bashrc
+echo "alias portproton='flatpak run ru.linux_gaming.PortProton'" >> ~/.bashrc
 ```
 
 **You will need to source the updated file with`~/.bashrc` or restart any terminal emulators you have open for the alias to take effect.**
@@ -85,13 +85,4 @@ To enable OBSVkCapture support install
 
 ```sh
 flatpak install org.freedesktop.Platform.VulkanLayer.OBSVkCapture
-```
-
-
-### Wine
-
-To use system wine install
-
-```sh
-flatpak install org.winehq.Wine
 ```
