@@ -13,12 +13,6 @@ fatal () {
 	echo -e "\n${1}\n"
 	exit 1
 }
-
-########################################################################
-if [ "$(id -u)" == "0" ] ; then
-	$yad_gui --error --text "\nDo not run ${portname} from the superuser!" 2>/dev/null
-	fatal "Do not run the script from the superuser!"
-fi
 ########################################################################
 
 if [ "$script_path" == "/app/bin" ] ; then
@@ -34,15 +28,6 @@ then PW_SET_LANG="Russian"
 else PW_SET_LANG="English"
 fi
 ########################################################################
-pw_notify_send () {
-	if command -v notify-send &>/dev/null ; then
-		if [[ -f "/usr/share/icons/hicolor/scalable/apps/portproton.svg" ]]
-		then notify-send -u normal -a PortProton -i "/usr/share/icons/hicolor/scalable/apps/portproton.svg" $@ "${PW_NOTIFY_TEXT}"
-		else notify-send -u normal -a PortProton $@ "${PW_NOTIFY_TEXT}"
-		fi
-	fi
-}
-########################################################################
 export PW_SILENT_INSTALL=1
 export PW_AUTOPLAY=1
 export INSTALLING_PORT=1
@@ -50,11 +35,11 @@ export INSTALLING_PORT=1
 case $PW_SET_LANG in
 	"Russian")
 		progress_bar() {
-		$yad_gui --progress --title="Установка..." --text="Настройка ${portname}" --pulsate --auto-close --auto-kill --width=500
+		yad --window-icon=portproton.svg --borders=10 --center --text-align=center --progress --title="Установка..." --text="Настройка ${portname}" --pulsate --auto-close --auto-kill --width=500
 		} ;;
 	"English")
 		progress_bar() {
-		$yad_gui --progress --title="Install..." --text="Install ${portname}" --pulsate --auto-close --auto-kill --width=500
+		yad --window-icon=portproton.svg --borders=10 --center --text-align=center --progress --title="Install..." --text="Install ${portname}" --pulsate --auto-close --auto-kill --width=500
 		} ;;
 esac
 ########################################################################
@@ -72,6 +57,8 @@ case "${PW_SET_LANG}" in
 	"Russian") echo "RUS" > "${PORT_WINE_PATH}/tmp/${portname}_loc" ;;
 	"English") echo "ENG" > "${PORT_WINE_PATH}/tmp/${portname}_loc" ;;
 esac
+########################################################################
+notify-send "Installing PortProton..."
 ########################################################################
 export PORT_WINE_TMP_PATH="${PORT_WINE_PATH}/tmp"
 cd "${PORT_WINE_PATH}"
